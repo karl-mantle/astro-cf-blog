@@ -21,7 +21,7 @@ function getTagSize(count?: number): string {
       <a
         style={`font-size: ${getTagSize(tag.count)}`}
         class:list={['p-1 font-medium border-b border-transparent hover:border-mikado-950 hover:text-mikado-950 focus-visible:bg-mikado-300 focus-visible:text-black focus:border-b-2 focus-visible:border-black transition duration-300', getTagSize(tag.count)]}
-        href={`${Astro.site}blog/tag/${slugify(tag.name)}`}
+        href={`${Astro.site}posts/tag/${slugify(tag.name)}`}
         aria-label={`view posts tagged with ${tag.name}`}
       >
         #{tag.name.toLowerCase()}

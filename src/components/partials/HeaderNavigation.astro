@@ -42,7 +42,7 @@ const postsCategories: Terms[] = await getCategories('posts');
             <li>
               <a
                 class="group/link flex justify-between items-center w-full p-4 border-b border-mikado-500 hover:border-mikado-500 md:border-transparent focus-visible:border-black focus:text-mikado-950 focus-visible:text-black bg-white/50 md:bg-transparent focus:bg-mikado-200 focus-visible:bg-mikado-300 transition duration-300"
-                href={`${Astro.site}blog/category/${category.slug}`}
+                href={`${Astro.site}posts/category/${category.slug}`}
                 aria-label={`Link to ${category.name}`}
               >
                 <span>{category.name}</span>
@@ -77,7 +77,7 @@ const postsCategories: Terms[] = await getCategories('posts');
     <li class="" data-menu-item role="none">
       { /* submenu button */ }
       <a class="group/link flex justify-between gap-4 w-full items-center p-4 hover:text-mikado-950 cursor-pointer border-b border-mikado-500 focus-visible:border-b-2 focus-visible:border-black focus:text-mikado-950 focus-visible:text-black focus:bg-mikado-200 focus-visible:bg-mikado-300 transition duration-300"
-        href={`${Astro.site}blog`}
+        href={`${Astro.site}posts`}
         role="menuitem"
       >
         <span>View all posts</span>

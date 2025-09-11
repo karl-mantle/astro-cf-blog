@@ -23,7 +23,7 @@ const entries = await getEntries(contentCollection, maxEntries);
         content={post.rendered}
         date={post.data.updatedDate ?? post.data.pubDate}
         heading={post.data.title}
-        href={`${Astro.site}blog/${post.data.slug}`}
+        href={`${Astro.site}posts/${post.data.slug}`}
         image={post.data.image}
       />
     )

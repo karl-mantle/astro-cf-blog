@@ -21,7 +21,7 @@ const entries = await getEntries(contentCollection, maxEntries);
       <PostCardMini
         description={post.data.description}
         heading={post.data.title} 
-        href={`${Astro.site}blog/${post.data.slug}`}
+        href={`${Astro.site}posts/${post.data.slug}`}
         image={post.data.image}
       />
     )

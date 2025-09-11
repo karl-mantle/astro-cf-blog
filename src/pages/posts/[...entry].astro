@@ -69,10 +69,10 @@ const authorData = author?.data;
     
           <nav class="hidden md:flex justify-center md:justify-between gap-4 pr-4">
             { prevEntry &&  (
-              <Button href={`${Astro.site}blog/${prevEntry.data.slug}`} aria-label="previous post" icon="ri:arrow-left-s-line" iconSize={24} class="rounded-4xl" />
+              <Button href={`${Astro.site}posts/${prevEntry.data.slug}`} aria-label="previous post" icon="ri:arrow-left-s-line" iconSize={24} class="rounded-4xl" />
             )}
             { nextEntry && (
-              <Button href={`${Astro.site}blog/${nextEntry.data.slug}`} aria-label="next post" icon="ri:arrow-right-s-line" iconSize={24} class="rounded-4xl" />
+              <Button href={`${Astro.site}posts/${nextEntry.data.slug}`} aria-label="next post" icon="ri:arrow-right-s-line" iconSize={24} class="rounded-4xl" />
             )}
           </nav>
         </div>
@@ -88,7 +88,7 @@ const authorData = author?.data;
       
       <div class="flex flex-col gap-4">
         <h2 class="text-xl font-medium">Tagged</h2>
-        <TagList tags={entry.data.tags} permalink="blog/tag" />
+        <TagList tags={entry.data.tags} permalink="posts/tag" />
       </div>
     </section>
 

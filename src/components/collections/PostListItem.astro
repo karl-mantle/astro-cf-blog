@@ -43,7 +43,7 @@ const { category, content, date, heading, href, image }: Props = Astro.props;
     <Date date={date} />
     <span>|</span>
     <Button
-      href={`${Astro.site}blog/category/${slugify(category)}`}
+      href={`${Astro.site}posts/category/${slugify(category)}`}
       label={category}
     />
   </div>

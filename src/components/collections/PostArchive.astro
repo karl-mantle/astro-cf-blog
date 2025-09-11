@@ -34,7 +34,7 @@ const { description, heading, page }: Props = Astro.props;
         description={post.data.description}
         heading={post.data.title}
         image={post.data.image}
-        href={`${Astro.site}blog/${post.data.slug}`}
+        href={`${Astro.site}posts/${post.data.slug}`}
       />
     )}
   </ol>
