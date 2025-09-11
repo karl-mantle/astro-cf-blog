@@ -1,0 +1,93 @@
+---
+import Base from '~/layouts/Base.astro';
+---
+
+<Base
+  title="Search"
+  description="Search the site to find pages, posts, and other content. Use keywords to locate relevant results."
+>
+
+  <section class="relative grid grid-cols-1 place-content-start gap-4 max-w-3xl mb-4 md:mb-12">
+    <h1 class="text-2xl md:text-3xl font-medium">Search this site</h1>
+    <div id="search" class="w-full"></div>
+  </section>
+
+</Base>
+
+<script>
+  // @ts-nocheck
+  function initSearch() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const searchString = urlParams.get("q");
+    
+    let pagefind = new PagefindUI({
+      element: "#search",
+      debounceTimeoutMs: 500,
+      showEmptyFilters: false,
+      excerptLength: 15,
+      showImages: false,
+      addStyles: false,
+      autofocus: true,
+      pageSize: 10,
+      processResult: function (result) {
+        result.url = result.url.replace(/\/$/, "");
+        return result;
+      }
+    });
+    if (searchString) { 
+      pagefind.triggerSearch(searchString);
+    }
+  };
+  document.addEventListener('DOMContentLoaded', initSearch);
+  document.addEventListener('astro:after-swap', initSearch);
+</script>
+
+<style is:global>
+  @reference "~/styles/global.css";
+
+  .pagefind-ui__form {
+    @apply flex flex-col gap-2;
+  }
+
+  .pagefind-ui__search-input {
+    @apply p-4 border border-mikado-500 focus:text-mikado-950 bg-transparent focus:bg-mikado-100/25 ring-mikado-500 placeholder:text-mikado-900 hover:placeholder:text-mikado-950;
+  }
+
+  .pagefind-ui__search-clear {
+    @apply absolute top-18 right-6 w-fit border-b focus:border-b-2 border-transparent hover:border-mikado-950 focus-visible:border-black focus-visible:p-1 focus-visible:bg-mikado-300 hover:text-mikado-950 focus-visible:text-black text-sm cursor-pointer;
+  }
+
+  .pagefind-ui__message {
+    @apply font-medium;
+  }
+
+  .pagefind-ui__drawer {
+    @apply h-full overflow-y-auto;
+  }
+
+  .pagefind-ui__result {
+    @apply border-b border-mikado-500 my-4;
+  }
+
+  .pagefind-ui__result mark {
+    @apply bg-mikado-300;
+  }
+
+  .pagefind-ui__result-link {
+    @apply font-semibold hover:text-mikado-950 hover:underline underline-offset-4 focus:decoration-2 focus-visible:p-1 focus-visible:bg-mikado-300 focus-visible:text-black;
+  }
+
+  .pagefind-ui__result-title {
+    @apply mb-2;
+  }
+
+  .pagefind-ui__result-inner {
+    @apply my-2;
+  }
+
+  .pagefind-ui__button {
+    @apply flex justify-center items-center p-2 px-4 mr-auto border hover:border-2 border-mikado-500 focus-visible:bg-mikado-300 focus-visible:text-black focus-visible:border-black bg-transparent hover:bg-mikado-100/25 hover:border-mikado-950 hover:text-mikado-950 transition duration-300 cursor-pointer;
+  }
+
+</style>
