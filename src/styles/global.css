@@ -21,8 +21,8 @@
   --color-mikado-950: oklch(0.2199 0.0460 101.82);
 }
 
-@layer base {
+@layer utilities {
   input, textarea {
-    @apply rounded-none
+    @apply rounded-none text-mikado-900 hover:text-mikado-950 bg-transparent focus:ring-mikado-500 border-b border-mikado-500 focus:bg-mikado-100/25
   }
 }
