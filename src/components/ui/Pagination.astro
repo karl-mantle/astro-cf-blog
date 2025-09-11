@@ -1,0 +1,60 @@
+---
+import Button from '~/components/ui/Button.astro';
+
+const iconSize = 21;
+const { page } = Astro.props;
+---
+
+<nav class="flex justify-center mb-4 md:mb-13" aria-label="pagination">
+  <ul class="flex items-center">
+    <li class="w-1/4 flex justify-end">
+      {page.url.prev ?
+        <Button
+          href={page.url.prev}
+          label="Previous"
+          icon="ri:arrow-left-line"
+          iconSize={iconSize}
+          iconReverse={true}
+          aria-label="go to previous page"
+        />
+        :
+        <Button
+          disabled={true}
+          href=""
+          label="Previous"
+          icon="ri:arrow-left-line"
+          iconSize={iconSize}
+          iconReverse={true}
+          aria-disabled="true"
+        />
+      }
+    </li>
+
+    <li class="w-1/2 flex justify-center">
+      <span class="px-4 border-x-2 border-mikado-500" aria-label="current page">
+        Page {page.currentPage} of {page.lastPage}
+      </span>
+    </li>
+
+    <li class="w-1/4 flex justify-end">
+      {page.url.next ?
+        <Button
+          href={page.url.next}
+          label="Next"
+          icon="ri:arrow-right-line"
+          iconSize={iconSize}
+          aria-label="go to next page"
+        />
+        :
+        <Button
+          disabled={true}
+          href=""
+          label="Next"
+          icon="ri:arrow-right-line"
+          iconSize={iconSize}
+          aria-disabled="true"
+        />
+      }
+    </li>
+  </ul>
+</nav>

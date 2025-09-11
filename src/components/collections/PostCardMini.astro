@@ -1,0 +1,46 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import { slugify } from '~/utils/collections';
+
+interface Props extends HTMLAttributes<'li'> {
+  description: string,
+  heading: string,
+  href: string,
+  image?: {
+    alt: string | null,
+    src: ImageMetadata
+  }
+};
+
+const { description, heading, href, image }: Props = Astro.props;
+---
+
+<li>
+  <a class="group/card relative h-full flex flex-col border-transparent focus:border-2 bg-black/75 overflow-hidden text-mikado-50 focus:border-white focus:bg-pink-300 focus:text-black" href={href} aria-label={`Link to ${slugify(heading)}`} >
+    <article class="flex flex-col flex-grow gap-2 p-4 min-h-40 z-5 rounded-xl backdrop-blur-[1px] group-hover/card:backdrop-blur-xs transition duration-300">
+      <div class="flex justify-between gap-4">
+        <h3 class="text-lg md:text-xl font-serif font-medium">{heading}</h3>
+        <Icon
+          name="ri:arrow-right-line"
+          height={21}
+          width={21}
+          class="min-w-5.25 group-hover/card:-rotate-45 group-focus/card:-rotate-45 transition-transform duration-300 ease-in-out"
+        />
+      </div>
+      <p class="text-sm">{description}</p>
+    </article>
+
+    { image && (
+      <Image
+        alt={image.alt}
+        class="absolute inset-0 h-full object-cover opacity-50 group-focus/card:hidden transition duration-300"
+        format="webp"
+        width={412}
+        src={image.src}
+        loading="lazy"
+      />
+    )}
+  </a>
+</li>

@@ -1,0 +1,107 @@
+---
+import { type CollectionEntry, getEntry, render } from 'astro:content';
+import { slugify, getEntries } from '~/utils/collections';
+import Base from '~/layouts/Base.astro';
+import Button from '~/components/ui/Button.astro';
+import Date from '~/components/ui/Date.astro';
+import PostHero from '~/components/collections/PostHero.astro';
+import TagList from '~/components/ui/TagList.astro';
+import RelatedEntries from '~/components/collections/RelatedEntries.astro';
+import ShareLinks from '~/components/ui/ShareLinks.astro';
+import TableOfContents from '~/components/ui/TableOfContents.astro';
+
+type Props = { 
+  entry: CollectionEntry<'posts'>,
+  prevEntry: CollectionEntry<'posts'>,
+  nextEntry: CollectionEntry<'posts'>
+};
+
+export async function getStaticPaths() {
+    const entries = await getEntries('posts');
+    const entryCount = entries.length;
+    return entries.map((entry, index) => ({
+        params: { entry: entry.data.slug },
+        props: {
+            entry,
+            prevEntry: index + 1 < entryCount ? entries[index + 1] : null,
+            nextEntry: index > 0 ? entries[index - 1] : null
+        }
+    }));
+};
+
+const { entry, prevEntry, nextEntry } = Astro.props;
+const { Content, headings } = await render(entry);
+const author =  await getEntry('author', entry.data.author.id);
+const authorData = author?.data;
+---
+
+<Base
+  authorData={authorData}
+  description={entry.data.description}
+  postData={entry.data}
+  schemaType="Article"
+  tableOfContents={headings.length > 0}
+  title={entry.data.title}
+>
+  <div class="max-w-3xl mb-4 md:mb-12">
+    <TableOfContents headings={headings} />
+
+    <article class="grid grid-cols-1 gap-4 mb-4">
+      <PostHero
+        category={entry.data.category}
+        date={entry.data.pubDate}
+        description={entry.data.description}
+        heading={entry.data.title}
+        image={entry.data.image}
+      />
+
+      {/* Post body */}
+      <section class="prose prose-mikado prose-lg font-serif max-w-[75ch] mb-4 md:mb-8">
+        <Content />
+      </section>
+
+      {/* Share links */}
+      <footer class="not-prose flex flex-col gap-2">
+        <hr class="w-full h-[1px] border-none bg-mikado-500" />
+
+        <div class="flex justify-between">
+          <ShareLinks description="Share this post:" display={['email', 'facebook', 'linkedin', 'whatsapp']} title={entry.data.title} url={Astro.url.toString()} />
+    
+          <nav class="hidden md:flex justify-center md:justify-between gap-4 pr-4">
+            { prevEntry &&  (
+              <Button href={`${Astro.site}blog/${prevEntry.data.slug}`} aria-label="previous post" icon="ri:arrow-left-s-line" iconSize={24} class="rounded-4xl" />
+            )}
+            { nextEntry && (
+              <Button href={`${Astro.site}blog/${nextEntry.data.slug}`} aria-label="next post" icon="ri:arrow-right-s-line" iconSize={24} class="rounded-4xl" />
+            )}
+          </nav>
+        </div>
+      </footer>
+    </article>
+
+    {/* Post meta */}
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div class="flex flex-col gap-4">
+        <h2 class="text-xl font-medium">Description</h2>
+        <p class="text-sm">{entry.data.description}</p>
+      </div>
+      
+      <div class="flex flex-col gap-4">
+        <h2 class="text-xl font-medium">Tagged</h2>
+        <TagList tags={entry.data.tags} permalink="blog/tag" />
+      </div>
+    </section>
+
+    {/* Related Posts */}
+    <section class="relative grid grid-cols-1 gap-4">
+      <h2 class="text-xl font-medium">Related posts</h2>
+
+      <RelatedEntries
+        category={entry.data.category}
+        contentCollection="posts"
+        maxEntries={3}
+      />
+    </section>
+
+  </div>
+</Base>

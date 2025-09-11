@@ -1,0 +1,46 @@
+---
+import Button from '~/components/ui/Button.astro';
+
+const socialLinks = [
+  /* { // BlueSky
+    href: 'https://bsky.app/profile/karl-em.bsky.social',
+    icon: 'simple-icons:bluesky',
+    label: `Follow me on BlueSky`,
+    show: true
+  }, */
+  { // LinkedIn
+    href: 'https://www.linkedin.com/in/karlmantle/',
+    icon: 'simple-icons:linkedin',
+    label: `Connect with me on LinkedIn`,
+    show: true
+  },
+  { // GitHub
+    href: 'https://github.com/karl-mantle/astro-cf-blog/',
+    icon: 'simple-icons:github',
+    label: `Visit the GitHub repo`,
+    show: true
+  },
+  { // Website
+    href: 'https://www.karlmantle.com',
+    icon: 'ri:earth-line',
+    label: `Visit my website`,
+    show: true
+  }
+];
+---
+
+<div class="flex items-center gap-2">
+  {(
+    socialLinks
+    .filter(link => link.show)
+    .map((link) =>
+      <Button
+        icon={link.icon}
+        iconSize={21}
+        href={link.href}
+        aria-label={link.label}
+        openNewTab={true}
+      />
+    )
+  )}
+</div>

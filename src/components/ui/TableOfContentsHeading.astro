@@ -1,0 +1,22 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+const { heading } = Astro.props;
+---
+
+<li style={`margin-left: ${(heading.depth - 2) * 0.5}rem`} class="flex flex-col">
+  <a
+    class="py-1 text-sm font-medium hover:underline underline-offset-4 focus:decoration-2 border-b-2 border-transparent hover:text-mikado-950 focus-visible:px-1 focus-visible:bg-mikado-300 focus-visible:text-black focus-visible:border-black transition duration-300"
+    href={'#' + heading.slug}
+  >
+    {heading.text}
+  </a>
+
+  { heading.subheadings.length > 0 && (
+    <ul>
+      {heading.subheadings.map((subheading: MarkdownHeading) => (
+        <Astro.self heading={subheading} />
+      ))}
+    </ul>
+  )}
+</li>

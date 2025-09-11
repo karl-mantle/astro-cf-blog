@@ -1,18 +1,57 @@
-import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
+import { glob } from 'astro/loaders';
+import { defineCollection, reference, z } from 'astro:content';
+import { slugify } from './utils/collections';
 
-const blog = defineCollection({
-  // Load Markdown and MDX files in the `src/content/blog/` directory.
-  loader: glob({ base: "./src/content/blog", pattern: "**/*.{md,mdx}" }),
-  // Type-check frontmatter using a schema
-  schema: z.object({
+const author = defineCollection({
+  loader: glob({ base: './src/content/author', pattern: '**/*.yaml' }),
+  schema: ({ image }) => z.object({
+    draft: z.boolean().default(false),
     title: z.string(),
+    category: z.string().default('Uncategorised'),
     description: z.string(),
-    // Transform string to Date object
+    image: z
+      .object({
+        src: image(),
+        alt: z.string().nullable().default(null)
+      })
+    .optional(),
     pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    heroImage: z.string().optional(),
+    slug: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    updatedDate: z.coerce.date().optional()
   }),
 });
 
-export const collections = { blog };
+const posts = defineCollection({
+  loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx}' }),
+  schema: ({ image }) => z.object({
+    draft: z.boolean().default(false),
+    title: z.string(),
+    author: reference('author').default('default'),
+    category: z.string().default('Uncategorised'),
+    description: z.string(),
+    slug: z.string().optional(),
+    image: z
+      .object({
+        src: image(),
+        alt: z.string().nullable().default(null)
+      })
+      .optional(),
+    imageAttribution: z
+      .object({
+        name: z.string().optional(),
+        url: z.string().url().optional()
+      })
+      .optional(),
+    pubDate: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    updatedDate: z.coerce.date().optional()
+  }).refine((data) => {
+    if (!data.slug) {
+      data.slug = slugify(data.title)
+    }
+    return true;
+  }),
+});
+
+export const collections = { author, posts };

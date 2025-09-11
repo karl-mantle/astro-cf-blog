@@ -1,0 +1,29 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import { type CollectionEntry } from 'astro:content';
+import { getEntries } from '~/utils/collections';
+import Base from '~/layouts/Base.astro';
+import PostArchive from '~/components/collections/PostArchive.astro';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+    const posts = await getEntries('posts');
+    return paginate(posts, {
+      pageSize: 7
+    });
+};
+
+const { page } = Astro.props as { page: Page<CollectionEntry<'posts'>>};
+---
+
+<Base
+  title="All posts"
+  description="View all entries on this blog."
+>
+
+  <PostArchive
+    description={`Now displaying ${page.start + 1} to ${page.end + 1} posts out of ${page.total} posts.`}
+    heading="Viewing all posts"
+    page={page}
+  />
+
+</Base>

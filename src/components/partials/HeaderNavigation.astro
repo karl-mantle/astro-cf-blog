@@ -1,0 +1,227 @@
+---
+import { Icon } from 'astro-icon/components';
+import { getCategories } from '~/utils/collections';
+import TagCloud from '~/components/ui/TagCloud.astro';
+
+type Terms = {
+  count?: number,
+  name: string,
+  slug: string,
+  type?: string
+};
+
+const postsCategories: Terms[] = await getCategories('posts');
+---
+<nav
+  class="col-span-2 hidden md:grid grid-cols-1 md:w-56 md:mb-auto font-medium"
+  aria-label="site navigation"
+  id="site-nav"
+  data-site-nav
+>
+  { /* menu */ }
+  <ul class="" role="menubar">
+
+    { /* all categories */ }
+    <li class="" data-menu-item role="none">
+      { /* submenu button */ }
+      <button class="flex justify-between gap-4 w-full items-center p-4 hover:text-mikado-950 cursor-pointer border-b border-mikado-500 focus-visible:border-b-2 focus-visible:border-black focus:text-mikado-950 focus-visible:text-black focus:bg-mikado-200 focus-visible:bg-mikado-300 transition duration-300"
+        aria-controls="categories-submenu"
+        aria-expanded="false"
+        aria-haspopup="true"
+        data-submenu-toggle
+        role="menuitem"
+      >
+        <span>Categories</span>
+        <Icon class="w-4 transition duration-300" name="ri:arrow-down-s-line" height={16} width={16} />
+      </button>
+
+      { /* categories submenu */ }
+      <div class="hidden grid grid-cols-1 transition duration-300" data-submenu id="categories-submenu" role="menu" aria-hidden="true">
+        <ul aria-label="links to blog category archives" class="flex flex-col">
+          {postsCategories.map((category: Terms) => (
+            <li>
+              <a
+                class="group/link flex justify-between items-center w-full p-4 border-b border-mikado-500 hover:border-mikado-500 md:border-transparent focus-visible:border-black focus:text-mikado-950 focus-visible:text-black bg-white/50 md:bg-transparent focus:bg-mikado-200 focus-visible:bg-mikado-300 transition duration-300"
+                href={`${Astro.site}blog/category/${category.slug}`}
+                aria-label={`Link to ${category.name}`}
+              >
+                <span>{category.name}</span>
+                <Icon name="ri:arrow-right-line" height={18} width={18} class="w-4 md:text-transparent group-hover/link:text-mikado-950 group-focus/link:text-black group-focus/link:-rotate-45 transition duration-500" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </li>
+
+    { /* all tags */ }
+    <li class="" data-menu-item role="none">
+      { /* submenu button */ }
+      <button class="flex justify-between gap-4 w-full items-center p-4 hover:text-mikado-950 cursor-pointer border-b border-mikado-500 focus-visible:border-b-2 focus-visible:border-black focus:text-mikado-950 focus-visible:text-black focus:bg-mikado-200 focus-visible:bg-mikado-300 transition duration-300"
+        aria-controls="tags-submenu"
+        aria-expanded="false"
+        aria-haspopup="true"
+        data-submenu-toggle
+        role="menuitem"
+      >
+        <span>Tags</span>
+        <Icon class="w-4 transition duration-300" name="ri:arrow-down-s-line" height={16} width={16} />
+      </button>
+
+      { /* tags submenu */ }
+      <div class="hidden grid grid-cols-1 p-4 w-full transition duration-300" data-submenu id="tags-submenu" role="menu" aria-hidden="true">
+          <TagCloud class=""/>
+      </div>
+    </li>
+
+    <li class="" data-menu-item role="none">
+      { /* submenu button */ }
+      <a class="group/link flex justify-between gap-4 w-full items-center p-4 hover:text-mikado-950 cursor-pointer border-b border-mikado-500 focus-visible:border-b-2 focus-visible:border-black focus:text-mikado-950 focus-visible:text-black focus:bg-mikado-200 focus-visible:bg-mikado-300 transition duration-300"
+        href={`${Astro.site}blog`}
+        role="menuitem"
+      >
+        <span>View all posts</span>
+        <Icon class="w-4 md:text-transparent group-hover/link:text-mikado-950 group-focus/link:text-black group-focus/link:-rotate-45 transition duration-300" name="ri:arrow-right-line" height={16} width={16} />
+    </a>
+    </li>
+
+    <form class="group/search flex relative" action={`${Astro.site}search`} method="GET">
+      <input class="w-full p-4 pr-12 border-0 border-b border-mikado-500 bg-transparent placeholder:text-mikado-900 group-hover/search:placeholder:text-mikado-950 focus:bg-mikado-100/25 ring-mikado-500" type="text" name="q" placeholder="Search">
+
+      <button class="absolute top-1/2 right-4 -translate-y-1/2 hover:cursor-pointer focus-visible:p-1 focus-visible:bg-mikado-300 focus-visible:text-black group-hover/search:text-mikado-950 group-focus/search:text-black transition duration-300" type="submit">
+        <span class="sr-only">Search</span>
+        <Icon class="w-4.5" name="ri:search-line" height={18} width={18} />
+      </button>
+    </form>
+
+  </ul>
+</nav>
+
+{ /* TODO: update this, modified from https://github.com/karl-mantle/astro-karlstuff */ }
+<script>
+  // @ts-nocheck
+  function initSiteNav() {
+    const nav = document.getElementById('site-nav');
+    const toggleButton = document.getElementById('nav-toggle-btn');
+    const iconOpen = document.getElementById('nav-open-icon');
+    const iconClose = document.getElementById('nav-close-icon');
+    const header = document.getElementById('site-header');
+
+    if (!nav || !toggleButton || !header) return;
+  
+    let siteNavigationOpen = false;
+    let lastScrollY = window.scrollY;
+  
+    const setMenuOpenCSS = () => {
+      //header.classList.remove('md:rounded-xl');
+      //header.classList.add('md:bg-neutral-900', 'shadow-sm', 'md:rounded-t-xl');
+    };
+  
+    const setMenuClosedCSS = () => {
+      //header.classList.remove('md:bg-neutral-900', 'shadow-sm', 'md:rounded-t-xl');
+      //header.classList.add('md:rounded-xl');
+    };
+
+    const updateBodyScrollLock = () => {
+      //document.body.classList.toggle('h-full', siteNavigationOpen);
+      //document.body.classList.toggle('overflow-hidden', siteNavigationOpen);
+    };
+  
+    const updateNavUI = () => {
+      if (!nav || !toggleButton) return;
+      nav.classList.toggle('hidden', !siteNavigationOpen);
+      toggleButton.setAttribute('aria-expanded', String(siteNavigationOpen));
+      iconOpen?.classList.toggle('hidden', siteNavigationOpen);
+      iconClose?.classList.toggle('hidden', !siteNavigationOpen);
+      updateBodyScrollLock();
+    };
+
+    const closeMenuOnScroll = () => {
+      const openSubmenus = document.querySelectorAll('[data-submenu]:not(.hidden)');
+      if (openSubmenus.length > 0 && window.scrollY > lastScrollY && window.scrollY > 50) {
+        openSubmenus.forEach(submenu => {
+          submenu.classList.add('hidden');
+          submenu.previousElementSibling?.setAttribute('aria-expanded', 'false');
+          submenu.previousElementSibling?.setAttribute('aria-label', 'open submenu');
+        });
+        setMenuClosedCSS();
+      }
+    };
+  
+    document.querySelectorAll('[data-submenu-toggle]').forEach((btn) => {
+      const menuItem = btn.closest('[data-menu-item]');
+      const submenu = menuItem?.querySelector('[data-submenu]');
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !submenu.classList.contains('hidden');
+        document.querySelectorAll('[data-submenu]').forEach(menu => {
+          menu.classList.add('hidden');
+          menu.previousElementSibling?.setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          submenu.classList.remove('hidden');
+          submenu.setAttribute('aria-hidden', 'false');
+          btn.setAttribute('aria-expanded', 'true');
+          btn.setAttribute('aria-label', 'close submenu');
+          setMenuOpenCSS();
+        } else {
+          submenu.classList.add('hidden');
+          submenu.setAttribute('aria-hidden', 'true');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.setAttribute('aria-label', 'open submenu');
+          setMenuClosedCSS();
+        }
+      });
+
+      menuItem?.addEventListener('focusout', (e) => {
+        const newTarget = e.relatedTarget;
+        if (!menuItem.contains(newTarget)) {
+          submenu?.classList.add('hidden');
+          submenu.setAttribute('aria-hidden', 'true');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.setAttribute('aria-label', 'open submenu');
+          setMenuClosedCSS();
+        }
+      });
+    });
+
+    toggleButton?.addEventListener('click', () => {
+      siteNavigationOpen = !siteNavigationOpen;
+      updateNavUI();
+    });
+  
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('[data-menu-item]')) {
+        document.querySelectorAll('[data-submenu]').forEach(menu => {
+          menu.classList.add('hidden');
+          menu.setAttribute('aria-hidden', 'true');
+          menu.previousElementSibling?.setAttribute('aria-expanded', 'false');
+          menu.previousElementSibling?.setAttribute('aria-label', 'open submenu');
+        });
+        setMenuClosedCSS();
+      }
+    });
+
+    window.addEventListener('scroll', () => {
+      closeMenuOnScroll();
+      lastScrollY = window.scrollY;
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        siteNavigationOpen = false;
+        updateNavUI();
+        document.querySelectorAll('[data-submenu]').forEach(menu => {
+          menu.classList.add('hidden');
+          menu.setAttribute('aria-hidden', 'true');
+          menu.previousElementSibling?.setAttribute('aria-expanded', 'false');
+          menu.previousElementSibling?.setAttribute('aria-label', 'open submenu'); 
+        });
+        setMenuClosedCSS();
+      }
+    });
+  };
+  document.addEventListener('DOMContentLoaded', initSiteNav);
+  document.addEventListener('astro:after-swap', initSiteNav);
+</script>

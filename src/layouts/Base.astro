@@ -1,0 +1,42 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { createSchema } from '~/utils/schema';
+import BaseHead from './BaseHead.astro';
+import SkipToMain from '~/components/ui/SkipToMain.astro';
+import Header from '~/components/partials/Header.astro';
+import TableOfContentsBtn from '~/components/ui/TableOfContentsBtn.astro';
+import ScrollToTop from '~/components/ui/ScrollToTop.astro';
+import Footer from '~/components/partials/Footer.astro';
+
+const { authorData, description, loadingOptions, postData, schemaType, tableOfContents, title } = Astro.props;
+
+const pageUrl = new URL(Astro.url.pathname, Astro.site);
+
+const schema = createSchema(authorData, description, pageUrl, postData, schemaType, title);
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <BaseHead 
+      description={description}
+      loadingOptions={loadingOptions}
+      title={title}
+    />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <ClientRouter />
+  </head>
+
+  <body class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-[auto_1fr_auto] text-base font-serif text-mikado-900 bg-mikado-50 md:max-h-screen md:overflow-hidden">
+    <SkipToMain />
+    <Header />
+    <main id="main" class="col-span-2 row-span-3 px-4 md:px-8 pt-8 md:pt-12 overflow-y-scroll" data-pagefind-body >
+      { tableOfContents && (
+        <TableOfContentsBtn />
+      )}
+      <slot />
+    </main>
+    <ScrollToTop />
+    <Footer />
+  </body>
+</html>

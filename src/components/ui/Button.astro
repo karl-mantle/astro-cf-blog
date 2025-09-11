@@ -1,0 +1,52 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { Icon } from 'astro-icon/components';
+
+interface Props extends HTMLAttributes<'a'> {
+  disabled?: boolean,
+  label?: string,
+  icon?: string,
+  iconAnimate?: boolean,
+  iconReverse?: boolean,
+  iconSize?: number,
+  openNewTab?: boolean
+};
+
+const { disabled, label, icon, iconAnimate, iconReverse, iconSize = 21, openNewTab, href, class: className, ...rest }: Partial<Props> = Astro.props;
+
+const newTabAttributes = openNewTab ? { target: "_blank", rel: "noreferrer noopener" } : {};
+---
+
+<a
+  class:list={[
+    'group/btn flex justify-center items-center w-fit font-medium border-b border-transparent focus-visible:border-b-2 focus-visible:border-black focus-visible:bg-mikado-300 hover:text-mikado-950 focus-visible:text-black transition-all duration-300',
+    label ? 'p-1 hover:border-mikado-950 focus:border-b-2' : '',
+    (!label && icon) ? 'p-2' : '',
+    (label && icon) ? 'gap-2' : '',
+    iconReverse ? 'flex-row-reverse' : '',
+    disabled ? 'cursor-not-allowed text-mikado-100 border-none hover:!text-mikado-200' : '',
+    className
+  ]}
+  href={href}
+  {...newTabAttributes}
+  {...rest}
+>
+
+  { label && (
+    <span>{label}</span>
+  )}
+
+  { icon && (
+    <Icon
+      class:list={[
+        'self-center transition-all duration-300',
+        !label ? 'group-hover/btn:-translate-y-1 group-hover/btn:drop-shadow-xl' : '',
+        iconAnimate ? 'group-hover/btn:-rotate-45' : ''
+      ]}
+      name={icon}
+      height={iconSize}
+      width={iconSize}
+    />
+  )}
+
+</a>
