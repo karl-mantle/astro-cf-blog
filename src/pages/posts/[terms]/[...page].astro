@@ -1,5 +1,5 @@
 ---
-import type { GetStaticPathsOptions, Page } from "astro";
+import type { GetStaticPathsOptions, GetStaticPathsResult, Page } from "astro";
 import type { CollectionEntry } from "astro:content";
 import { getTerms, getEntriesByTag, getEntriesByCategory } from "~/utils/collections";
 import Base from "~/layouts/Base.astro";
@@ -14,7 +14,7 @@ type Terms = {
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const terms: Terms[] = await getTerms("posts");
-  let paths: any[] = [];
+  let paths: GetStaticPathsResult = [];
 
   for (const term of terms) {
     const { name, slug, type } = term;
@@ -32,7 +32,7 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     }
 
     const paginatedTerms = paginate(entries, {
-      params: { terms: `${type}/${slug}` }, // add term slug map function
+      params: { terms: `${type}/${slug}` },
       pageSize: 7,
     });
 

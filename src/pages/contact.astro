@@ -58,10 +58,13 @@ import Base from "~/layouts/Base.astro";
 </Base>
 
 <script>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-nocheck
   function initContactForm() {
     const form = document.getElementById("form");
     const feedback = document.getElementById("feedback");
+
+    if (!form || !feedback) return;
 
     form.addEventListener("submit", function (e) {
       const formData = new FormData(form);
@@ -81,7 +84,7 @@ import Base from "~/layouts/Base.astro";
         body: json,
       })
         .then(async (response) => {
-          let json = await response.json();
+          const json = await response.json();
           if (response.status == 200) {
             feedback.innerHTML = json.message;
           } else {

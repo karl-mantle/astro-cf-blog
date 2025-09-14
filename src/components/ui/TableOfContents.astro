@@ -32,6 +32,7 @@ const toc = getTableOfContents(headings);
 </aside>
 
 <script>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-nocheck
   function initToc() {
     const toc = document.getElementById("toc");
@@ -39,7 +40,7 @@ const toc = getTableOfContents(headings);
     const toggleBtn = document.getElementById("toc-toggle-btn");
     const closeBtn = document.getElementById("toc-close-btn");
 
-    // maybe this should be global, so toc persists between different posts?
+    // ? maybe this should be global, so toc persists between different posts?
     let tocOpen = false;
 
     // TODO: add focus trap from search, perhaps a shared module??
