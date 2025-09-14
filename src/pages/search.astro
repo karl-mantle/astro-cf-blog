@@ -1,17 +1,15 @@
 ---
-import Base from '~/layouts/Base.astro';
+import Base from "~/layouts/Base.astro";
 ---
 
 <Base
   title="Search"
   description="Search the site to find pages, posts, and other content. Use keywords to locate relevant results."
 >
-
-  <section class="relative grid grid-cols-1 place-content-start gap-4 max-w-3xl mb-4 md:mb-12">
-    <h1 class="text-2xl md:text-3xl font-medium">Search this site</h1>
+  <section class="relative mb-4 grid max-w-3xl grid-cols-1 place-content-start gap-4 md:mb-12">
+    <h1 class="text-2xl font-medium md:text-3xl">Search this site</h1>
     <div id="search" class="w-full"></div>
   </section>
-
 </Base>
 
 <script>
@@ -20,7 +18,7 @@ import Base from '~/layouts/Base.astro';
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const searchString = urlParams.get("q");
-    
+
     let pagefind = new PagefindUI({
       element: "#search",
       debounceTimeoutMs: 500,
@@ -33,14 +31,14 @@ import Base from '~/layouts/Base.astro';
       processResult: function (result) {
         result.url = result.url.replace(/\/$/, "");
         return result;
-      }
+      },
     });
-    if (searchString) { 
+    if (searchString) {
       pagefind.triggerSearch(searchString);
     }
-  };
-  document.addEventListener('DOMContentLoaded', initSearch);
-  document.addEventListener('astro:after-swap', initSearch);
+  }
+  document.addEventListener("DOMContentLoaded", initSearch);
+  document.addEventListener("astro:after-swap", initSearch);
 </script>
 
 <style is:global>
@@ -51,11 +49,11 @@ import Base from '~/layouts/Base.astro';
   }
 
   .pagefind-ui__search-input {
-    @apply p-4 border border-mikado-500 focus:text-mikado-950 bg-transparent focus:bg-mikado-100/25 ring-mikado-500 placeholder:text-mikado-900 hover:placeholder:text-mikado-950;
+    @apply border-mikado-500 focus:text-mikado-950 focus:bg-mikado-100/25 ring-mikado-500 placeholder:text-mikado-900 hover:placeholder:text-mikado-950 border bg-transparent p-4;
   }
 
   .pagefind-ui__search-clear {
-    @apply absolute top-18 right-6 w-fit border-b focus:border-b-2 border-transparent hover:border-mikado-950 focus-visible:border-black focus-visible:p-1 focus-visible:bg-mikado-300 hover:text-mikado-950 focus-visible:text-black text-sm cursor-pointer;
+    @apply hover:border-mikado-950 focus-visible:bg-mikado-300 hover:text-mikado-950 absolute top-18 right-6 w-fit cursor-pointer border-b border-transparent text-sm focus:border-b-2 focus-visible:border-black focus-visible:p-1 focus-visible:text-black;
   }
 
   .pagefind-ui__message {
@@ -67,7 +65,7 @@ import Base from '~/layouts/Base.astro';
   }
 
   .pagefind-ui__result {
-    @apply border-b border-mikado-500 my-4;
+    @apply border-mikado-500 my-4 border-b;
   }
 
   .pagefind-ui__result mark {
@@ -75,7 +73,7 @@ import Base from '~/layouts/Base.astro';
   }
 
   .pagefind-ui__result-link {
-    @apply font-semibold hover:text-mikado-950 hover:underline underline-offset-4 focus:decoration-2 focus-visible:p-1 focus-visible:bg-mikado-300 focus-visible:text-black;
+    @apply hover:text-mikado-950 focus-visible:bg-mikado-300 font-semibold underline-offset-4 hover:underline focus:decoration-2 focus-visible:p-1 focus-visible:text-black;
   }
 
   .pagefind-ui__result-title {
@@ -87,7 +85,6 @@ import Base from '~/layouts/Base.astro';
   }
 
   .pagefind-ui__button {
-    @apply flex justify-center items-center p-2 px-4 mr-auto border hover:border-2 border-mikado-500 focus-visible:bg-mikado-300 focus-visible:text-black focus-visible:border-black bg-transparent hover:bg-mikado-100/25 hover:border-mikado-950 hover:text-mikado-950 transition duration-300 cursor-pointer;
+    @apply border-mikado-500 focus-visible:bg-mikado-300 hover:bg-mikado-100/25 hover:border-mikado-950 hover:text-mikado-950 mr-auto flex cursor-pointer items-center justify-center border bg-transparent p-2 px-4 transition duration-300 hover:border-2 focus-visible:border-black focus-visible:text-black;
   }
-
 </style>

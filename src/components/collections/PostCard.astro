@@ -1,48 +1,54 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
-import { Image } from 'astro:assets';
-import { Icon } from 'astro-icon/components';
-import Date from '~/components/ui/Date.astro';
+import type { HTMLAttributes } from "astro/types";
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import Date from "~/components/ui/Date.astro";
 
-interface Props extends HTMLAttributes<'li'> {
-  date: Date,
-  description: string,
-  heading: string,
-  href: string,
+interface Props extends HTMLAttributes<"li"> {
+  date: Date;
+  description: string;
+  heading: string;
+  href: string;
   image?: {
-    alt: string | null,
-    src: ImageMetadata
-  }
-};
+    alt: string | null;
+    src: ImageMetadata;
+  };
+}
 
 const { date, description, heading, href, image }: Props = Astro.props;
 ---
 
 <li>
-  <a class="group/card flex flex-col-reverse lg:flex-row-reverse flex-grow gap-4 p-1 border-transparent border-2 hover:text-mikado-950 focus-visible:text-black focus-visible:border-3 focus-visible:border-mikado-300 focus-visible:bg-mikado-100/25" href={href} >
-
+  <a
+    class="group/card hover:text-mikado-950 focus-visible:border-mikado-300 focus-visible:bg-mikado-100/25 flex flex-grow flex-col-reverse gap-4 border-2 border-transparent p-1 focus-visible:border-3 focus-visible:text-black lg:flex-row-reverse"
+    href={href}
+  >
     <Icon
       name="ri:arrow-right-line"
       height={24}
       width={24}
-      class="shrink-0 group-hover/card:-rotate-45 group-focus/card:-rotate-45 transition-transform duration-300"
+      class="shrink-0 transition-transform duration-300 group-hover/card:-rotate-45 group-focus/card:-rotate-45"
     />
 
-    <article class="flex flex-col flex-grow gap-2 text-sm">
-      <h3 class="text-lg md:text-xl font-serif font-medium pb-2 border-b border-mikado-500">{heading}</h3>
+    <article class="flex flex-grow flex-col gap-2 text-sm">
+      <h3 class="border-mikado-500 border-b pb-2 font-serif text-lg font-medium md:text-xl">
+        {heading}
+      </h3>
       <Date date={date} />
       <p>{description}</p>
     </article>
 
-    { image && (
-      <Image
-        alt={image.alt}
-        class="lg:max-w-48 lg:h-fit object-cover aspect-video opacity-75 group-hover/card:opacity-100 group-focus/card:opacity-100 transition duration-300"
-        format="webp"
-        width={450}
-        src={image.src}
-        loading="lazy"
-      />
-    )}
+    {
+      image && (
+        <Image
+          alt={image.alt}
+          class="aspect-video object-cover opacity-75 transition duration-300 group-hover/card:opacity-100 group-focus/card:opacity-100 lg:h-fit lg:max-w-48"
+          format="webp"
+          width={450}
+          src={image.src}
+          loading="lazy"
+        />
+      )
+    }
   </a>
 </li>

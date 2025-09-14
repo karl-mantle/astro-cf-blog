@@ -1,17 +1,17 @@
-import type { APIContext } from 'astro';
-import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
+import type { APIContext } from "astro";
+import rss from "@astrojs/rss";
+import { getCollection } from "astro:content";
 
 export async function GET(context: APIContext) {
-
-  const posts = await getCollection('posts');
+  const posts = await getCollection("posts");
 
   return rss({
     title: "Karl's blog",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquam.",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquam.",
     site: context.site ?? "https://blog.karlmantle.workers.dev/",
     trailingSlash: false,
-    stylesheet: '/rss/pretty-feed-v3.xsl',
+    stylesheet: "/rss/pretty-feed-v3.xsl",
     customData: `<language>en-GB</language>`,
     items: posts.map((post) => ({
       title: post.data.title,

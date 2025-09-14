@@ -1,11 +1,14 @@
 ---
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 ---
 
-<div id="toc-btn-wrapper" class="fixed bottom-5 right-5 md:bottom-2 md:right-6 z-45 w-16 hidden opacity-0 pointer-events-none transition duration-300">
+<div
+  id="toc-btn-wrapper"
+  class="pointer-events-none fixed right-5 bottom-5 z-45 hidden w-16 opacity-0 transition duration-300 md:right-6 md:bottom-2"
+>
   <button
     id="toc-toggle-btn"
-    class="flex items-center p-4 w-full bg-mikado-500/75 hover:bg-mikado-500 hover:text-mikado-950 hover:shadow-sm focus-visible:bg-mikado-300 focus-visible:text-black focus-visible:border-black cursor-pointer transition duration-300"
+    class="bg-mikado-500/75 hover:bg-mikado-500 hover:text-mikado-950 focus-visible:bg-mikado-300 flex w-full cursor-pointer items-center p-4 transition duration-300 hover:shadow-sm focus-visible:border-black focus-visible:text-black"
     type="button"
     title="show table of contents"
     aria-label="show table of contents"

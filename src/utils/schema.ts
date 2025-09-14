@@ -1,21 +1,27 @@
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from "astro:content";
 
 // TODO: Expand this
 
-export function createSchema (authorData: CollectionEntry<'author'>['data'], description: string, pageUrl: URL, postData: CollectionEntry<'posts'>['data'], schemaType: string, title: string) {
-
+export function createSchema(
+  authorData: CollectionEntry<"authors">["data"],
+  description: string,
+  pageUrl: URL,
+  postData: CollectionEntry<"posts">["data"],
+  schemaType: string,
+  title: string,
+) {
   let schema;
 
   switch (schemaType) {
-    case 'WebPage':
+    case "WebPage":
       schema = {
         "@context": "https://schema.org",
         "@type": "WebPage",
         name: title,
         url: pageUrl,
-      }
+      };
       break;
-    case 'Article':
+    case "Article":
       schema = {
         "@context": "https://schema.org",
         "@type": "Article",
@@ -35,9 +41,9 @@ export function createSchema (authorData: CollectionEntry<'author'>['data'], des
         author: {
           "@type": "Person",
           name: authorData?.title ?? undefined,
-          description: authorData?.description  ?? undefined
+          description: authorData?.description ?? undefined,
         },
-      }
+      };
       break;
     default:
       schema = {
@@ -45,13 +51,13 @@ export function createSchema (authorData: CollectionEntry<'author'>['data'], des
         "@type": "WebSite",
         name: title,
         url: pageUrl,
-      }
+      };
       break;
   }
 
-  return schema
-};
+  return schema;
+}
 
 export default {
-  createSchema
+  createSchema,
 };

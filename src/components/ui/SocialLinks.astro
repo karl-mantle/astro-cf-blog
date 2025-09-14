@@ -1,52 +1,40 @@
 ---
-import Button from '~/components/ui/Button.astro';
+import Button from "~/components/ui/Button.astro";
 
 const socialLinks = [
-  /* { // BlueSky
-    href: 'https://bsky.app/profile/karl-em.bsky.social',
-    icon: 'simple-icons:bluesky',
-    label: `Follow me on BlueSky`,
-    show: true
-  },
-  { // LinkedIn
-    href: 'https://www.linkedin.com/in/karlmantle/',
-    icon: 'simple-icons:linkedin',
-    label: `Connect with me on LinkedIn`,
-    show: true
-  }, */
-  { // Website
-    href: 'https://www.karlmantle.com',
-    icon: 'ri:earth-line',
+  {
+    href: "https://www.karlmantle.com",
+    icon: "ri:earth-line",
     label: `Visit my website`,
-    show: true
+    show: true,
   },
-  { // GitHub
-    href: 'https://github.com/karl-mantle/astro-cf-blog/',
-    icon: 'simple-icons:github',
+  {
+    href: "https://github.com/karl-mantle/astro-cf-blog/",
+    icon: "simple-icons:github",
     label: `Visit the GitHub repo`,
-    show: true
+    show: true,
   },
-  { // RSS
+  {
     href: `${Astro.site}rss.xml`,
-    icon: 'ri:rss-line',
+    icon: "ri:rss-line",
     label: `Subscribe to RSS feed`,
-    show: true
-  }
+    show: true,
+  },
 ];
 ---
 
 <div class="flex items-center gap-2">
-  {(
+  {
     socialLinks
-    .filter(link => link.show)
-    .map((link) =>
-      <Button
-        icon={link.icon}
-        iconSize={21}
-        href={link.href}
-        aria-label={link.label}
-        openNewTab={true}
-      />
-    )
-  )}
+      .filter((link) => link.show)
+      .map((link) => (
+        <Button
+          icon={link.icon}
+          iconSize={21}
+          href={link.href}
+          aria-label={link.label}
+          openNewTab={true}
+        />
+      ))
+  }
 </div>

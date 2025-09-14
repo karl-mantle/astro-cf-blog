@@ -1,0 +1,15 @@
+# build output
+dist/
+public/
+
+# generated types
+.astro/
+.wrangler/
+
+# dependencies
+node_modules/
+
+# files
+**/*.d.ts
+**/pagefind.yml
+**/content.config.ts

@@ -1,35 +1,38 @@
 ---
-import { shareLinks, createShareUrl } from '~/utils/share';
-import Button from '~/components/ui/Button.astro';
+import { shareLinks, createShareUrl } from "~/utils/share";
+import Button from "~/components/ui/Button.astro";
 
 interface Props {
-  description?: string,
-  display: string[],
-  title: string,
-  url: string
-};
+  description?: string;
+  display: string[];
+  title: string;
+  url: string;
+}
 
-const { display = ['email', 'facebook', 'linkedin', 'whatsapp'], description, title, url }: Props = Astro.props;
+const {
+  display = ["email", "facebook", "linkedin", "whatsapp"],
+  description,
+  title,
+  url,
+}: Props = Astro.props;
 ---
 
-<div class="flex justify-between items-center gap-2">
-   { description && (
-    <span class="font-medium mr-2">{description}</span>
-   )}
+<div class="flex items-center justify-between gap-2">
+  {description && <span class="mr-2 font-medium">{description}</span>}
 
   <div class="flex gap-1">
-    {(
+    {
       shareLinks
-      .filter(link => display.includes(link.name))
-      .map((link) =>
-        <Button
-          icon={link.icon}
-          iconSize={21}
-          href={createShareUrl(link.name, title, url)}
-          aria-label={link.label}
-          openNewTab={true}
-        />
-      )
-    )}
+        .filter((link) => display.includes(link.name))
+        .map((link) => (
+          <Button
+            icon={link.icon}
+            iconSize={21}
+            href={createShareUrl(link.name, title, url)}
+            aria-label={link.label}
+            openNewTab={true}
+          />
+        ))
+    }
   </div>
 </div>

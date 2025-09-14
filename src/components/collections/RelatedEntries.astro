@@ -1,31 +1,30 @@
 ---
-import type { DataEntryMap } from 'astro:content';
-import type { HTMLAttributes } from 'astro/types';
-import { getEntriesByCategory } from '~/utils/collections';
-import PostCardMini from '~/components/collections/PostCardMini.astro';
+import type { DataEntryMap } from "astro:content";
+import type { HTMLAttributes } from "astro/types";
+import { getEntriesByCategory } from "~/utils/collections";
+import PostCardMini from "~/components/collections/PostCardMini.astro";
 
-interface Props extends HTMLAttributes<'ol'> {
-  category: string,
-  contentCollection: keyof DataEntryMap,
-  maxEntries?: number
-};
+interface Props extends HTMLAttributes<"ol"> {
+  category: string;
+  contentCollection: keyof DataEntryMap;
+  maxEntries?: number;
+}
 
 const { contentCollection, category, maxEntries = 3 }: Props = Astro.props;
 
 const entries = await getEntriesByCategory(contentCollection, category, maxEntries);
 ---
 
-<ol class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-  { contentCollection === 'posts' && (
-    entries.map((post) =>
-      <PostCardMini
-        description={post.data.description}
-        heading={post.data.title}
-        image={post.data.image}
-        href={`${Astro.site}posts/${post.data.slug}`}
-      />
-    )
-  )}
-
+<ol class="grid grid-cols-1 gap-4 md:grid-cols-3">
+  {
+    contentCollection === "posts" &&
+      entries.map((post) => (
+        <PostCardMini
+          description={post.data.description}
+          heading={post.data.title}
+          image={post.data.image}
+          href={`${Astro.site}posts/${post.data.slug}`}
+        />
+      ))
+  }
 </ol>

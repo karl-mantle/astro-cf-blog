@@ -1,24 +1,26 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
-import { slugify } from '~/utils/collections';
+import type { HTMLAttributes } from "astro/types";
+import { slugify } from "~/utils/collections";
 
-interface Props extends HTMLAttributes<'ul'> {
-  tags: string[],
-  permalink: string
-};
+interface Props extends HTMLAttributes<"ul"> {
+  tags: string[];
+  permalink: string;
+}
 
 const { permalink, tags }: Props = Astro.props;
 ---
 
 <ul class="flex flex-wrap gap-3 px-1 text-sm" aria-label="list of tags">
-  {tags.map((tag) =>
-    <li>
-      <a
-        class="p-1 font-medium border-b border-transparent hover:border-mikado-950 hover:text-mikado-950 focus-visible:bg-mikado-300 focus-visible:text-black focus:border-b-2 focus-visible:border-black transition duration-300"
-        href={`${Astro.site}${permalink}/${slugify(tag)}`}
-      >
-        #{tag.toLowerCase()}
-      </a>
-    </li>
-  )}
+  {
+    tags.map((tag) => (
+      <li>
+        <a
+          class="hover:border-mikado-950 hover:text-mikado-950 focus-visible:bg-mikado-300 border-b border-transparent p-1 font-medium transition duration-300 focus:border-b-2 focus-visible:border-black focus-visible:text-black"
+          href={`${Astro.site}${permalink}/${slugify(tag)}`}
+        >
+          #{tag.toLowerCase()}
+        </a>
+      </li>
+    ))
+  }
 </ul>

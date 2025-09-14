@@ -19,10 +19,12 @@ export default defineConfig({
     }),
     mdx(),
     robotsTxt({
-      policy: [{
-        userAgent: '*',
-        disallow: '/'
-      }]
+      policy: [
+        {
+          userAgent: "*",
+          disallow: "/",
+        },
+      ],
     }),
     sitemap(),
   ],
@@ -32,6 +34,6 @@ export default defineConfig({
     },
   }),
   vite: {
-    plugins: [tailwindcss()]
-  }
+    plugins: [tailwindcss()],
+  },
 });
