@@ -1,4 +1,5 @@
 ---
+import type { HTMLAttributes } from "astro/types";
 import Button from "~/components/ui/Button.astro";
 import SocialLinks from "~/components/ui/SocialLinks.astro";
 ---
@@ -9,7 +10,11 @@ import SocialLinks from "~/components/ui/SocialLinks.astro";
   <nav class="flex text-sm" aria-label="footer navigation">
     <ul class="inline-flex gap-4">
       <li>
-        <Button label="Contact" href={`${Astro.site}contact`} />
+        <Button
+          label="Contact"
+          href={`${Astro.site}contact`}
+          {...{ "data-astro-reload": true } as HTMLAttributes<"a">}
+        />
       </li>
       <li>
         <Button label="Sitemap" href={`${Astro.site}sitemap-0.xml`} />
