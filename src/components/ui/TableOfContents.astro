@@ -90,5 +90,5 @@ const toc = getTableOfContents(headings);
     });
   }
   document.addEventListener("DOMContentLoaded", initToc);
-  document.addEventListener("astro:after-swap", initToc);
+  document.addEventListener("astro:page-load", initToc);
 </script>
