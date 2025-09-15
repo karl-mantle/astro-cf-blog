@@ -122,7 +122,12 @@ const postsCategories: Terms[] = await getCategories("posts");
       </a>
     </li>
 
-    <form class="group/search relative flex" action={`${Astro.site}search`} method="GET">
+    <form
+      class="group/search relative flex"
+      action={`${Astro.site}search`}
+      method="GET"
+      data-astro-reload
+    >
       <input
         class="border-mikado-500 placeholder:text-mikado-900 group-hover/search:placeholder:text-mikado-950 focus:bg-mikado-100/25 ring-mikado-500 w-full border-0 border-b bg-transparent p-4 pr-12"
         type="text"
