@@ -1,14 +1,13 @@
-import { glob } from 'astro/loaders';
-import { defineCollection, reference, z } from 'astro:content';
-import { slugify } from './utils/collections';
+import { glob } from "astro/loaders";
+import { defineCollection, reference, z } from "astro:content";
+import { slugify } from "~/utils/collections";
 
-const author = defineCollection({
-  loader: glob({ base: './src/content/author', pattern: '**/*.yaml' }),
+const authors = defineCollection({
+  loader: glob({ base: "src/content/authors", pattern: "**/*.yaml" }),
   schema: ({ image }) => z.object({
-    draft: z.boolean().default(false),
-    title: z.string(),
-    category: z.string().default('Uncategorised'),
+    category: z.string().default("Uncategorised"),
     description: z.string(),
+    draft: z.boolean().default(false),
     image: z
       .object({
         src: image(),
@@ -18,18 +17,18 @@ const author = defineCollection({
     pubDate: z.coerce.date(),
     slug: z.string().optional(),
     tags: z.array(z.string()).default([]),
+    title: z.string(),
     updatedDate: z.coerce.date().optional()
   }),
 });
 
 const posts = defineCollection({
-  loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx}' }),
+  loader: glob({ base: "src/content/posts", pattern: "**/*.{md,mdx}" }),
   schema: ({ image }) => z.object({
-    draft: z.boolean().default(false),
-    title: z.string(),
-    author: reference('author').default('default'),
-    category: z.string().default('Uncategorised'),
+    author: reference("authors").default("default"),
+    category: z.string().default("Uncategorised"),
     description: z.string(),
+    draft: z.boolean().default(false),
     slug: z.string().optional(),
     image: z
       .object({
@@ -45,6 +44,7 @@ const posts = defineCollection({
       .optional(),
     pubDate: z.coerce.date(),
     tags: z.array(z.string()).default([]),
+    title: z.string(),
     updatedDate: z.coerce.date().optional()
   }).refine((data) => {
     if (!data.slug) {
@@ -54,4 +54,4 @@ const posts = defineCollection({
   }),
 });
 
-export const collections = { author, posts };
+export const collections = { authors, posts };
