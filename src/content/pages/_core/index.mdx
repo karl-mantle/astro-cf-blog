@@ -1,0 +1,26 @@
+---
+title: "Homepage"
+description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+slug: "index"
+---
+
+import Section from "~/components/mdx/layout/Section.astro";
+import Markdown from "~/components/mdx/layout/Markdown.astro";
+import RecentPosts from "~/components/collections/posts/RecentPosts.astro";
+
+<Section class="contain mb-4 md:mb-12">
+<Markdown>
+
+# karl's blog
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+laboris nisi ut aliquip ex ea commodo consequat.
+
+## Latest posts
+
+</Markdown>
+
+<RecentPosts columns={2} max={4} variant="image" />
+
+</Section>

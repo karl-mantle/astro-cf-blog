@@ -12,7 +12,7 @@ interface Props {
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = await getPosts();
   return paginate(posts, {
-    params: { posts: collectionsConfig.permalink_posts },
+    params: { posts: collectionsConfig.permalink_posts.replace(/^\/+|\/+$/g, "") },
     pageSize: collectionsConfig.posts_per_page || 9,
   });
 }

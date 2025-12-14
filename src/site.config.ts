@@ -3,7 +3,7 @@ export const generalConfig = {
   url: new URL("https://blog.karlmantle.workers.dev/"),
   name: "karl's blog",
   short_name: "karlsblog",
-  title_separator: "-",
+  title_separator: "~",
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquam.",
   logo: {
