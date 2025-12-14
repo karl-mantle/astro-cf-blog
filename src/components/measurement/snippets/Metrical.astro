@@ -1,0 +1,19 @@
+---
+// https://docs.metrical.xyz/developers/how-to-start-tracking-users
+import { measurementConfig } from "~/site.config";
+
+export interface Props {
+  partytown?: boolean;
+}
+
+const { partytown = false } = Astro.props;
+const attrs = partytown ? { type: "text/partytown" } : { type: "text/javascript" };
+const id = measurementConfig.metrical_id;
+---
+
+<script is:inline define:vars={{ id }} {...attrs}>
+  window.metrical = {
+    app: id,
+  };
+</script>
+<script is:inline src="https://cdn.metrical.xyz/script.js" async {...attrs}></script>

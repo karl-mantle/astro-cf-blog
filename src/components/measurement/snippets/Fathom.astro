@@ -1,0 +1,18 @@
+---
+// https://usefathom.com/docs/script/embed
+import { measurementConfig } from "~/site.config";
+
+export interface Props {
+  partytown?: boolean;
+}
+
+const { partytown = false } = Astro.props;
+const attrs = partytown ? { type: "text/partytown" } : {};
+---
+
+<script
+  is:inline
+  src="https://cdn.usefathom.com/script.js"
+  data-site={measurementConfig.fathom_id}
+  defer
+  {...attrs}></script>

@@ -1,0 +1,10 @@
+---
+import { measurementConfig } from "~/site.config";
+import Metrical from "~/components/measurement/snippets/Metrical.astro";
+
+const partytown = measurementConfig.partytown;
+---
+
+<>
+  {measurementConfig.metrical_id && <Metrical {partytown} />}
+</>

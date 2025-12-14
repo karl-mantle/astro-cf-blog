@@ -1,0 +1,47 @@
+---
+import { measurementConfig } from "~/site.config";
+---
+
+<>
+  {
+    /* Google Search Console */
+    measurementConfig.google_verification && (
+      <meta name="google-site-verification" content={measurementConfig.google_verification} />
+    )
+  }
+
+  {
+    /* Bing / Microsoft Webmaster */
+    measurementConfig.bing_verificaton && (
+      <meta name="msvalidate.01" content={measurementConfig.bing_verificaton} />
+    )
+  }
+
+  {
+    /* Yandex Webmaster */
+    measurementConfig.yandex_verification && (
+      <meta name="yandex-verification" content={measurementConfig.yandex_verification} />
+    )
+  }
+
+  {
+    /* Baidu Webmaster */
+    measurementConfig.baidu_verification && (
+      <meta name="baidu-site-verification" content={measurementConfig.baidu_verification} />
+    )
+  }
+
+  {
+    /* Pinterest -> https://help.pinterest.com/en/business/article/claim-your-website */
+    measurementConfig.pinterest_verification && (
+      <meta name="p:domain_verify" content={measurementConfig.pinterest_verification} />
+    )
+  }
+
+  {
+    /* Meta / Facebook business -> https://www.facebook.com/business/help/321167023127050/ */
+    measurementConfig.facebook_verification && (
+      <meta name="facebook-domain-verification" content={measurementConfig.facebook_verification} />
+    )
+  }
+</>

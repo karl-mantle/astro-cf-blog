@@ -5,6 +5,8 @@ module.exports = {
       typography: () => ({
         mikado: {
           css: {
+            "code::before": { content: "none" },
+            "code::after": { content: "none" },
             "--tw-prose-body": "var(--color-mikado-800)",
             "--tw-prose-headings": "var(--color-mikado-900)",
             "--tw-prose-lead": "var(--color-mikado-700)",

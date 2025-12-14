@@ -1,0 +1,10 @@
+---
+import { measurementConfig } from "~/site.config";
+import GoogleTagManager from "~/components/measurement/snippets/GoogleTagManager.astro";
+
+const partytown = measurementConfig.partytown;
+---
+
+<>
+  {measurementConfig.google_gtm_id && <GoogleTagManager parent="body" />}
+</>
