@@ -1,23 +1,16 @@
 ---
-import Base from "~/layouts/Base.astro";
-import RecentEntriesList from "~/components/collections/RecentEntriesList.astro";
+import { getEntry, render } from "astro:content";
+import HTML from "~/components/layout/base/HTML.astro";
+
+const entry = await getEntry("pages", "index");
+
+if (!entry) {
+  throw new Error("Index entry not found in 'pages' collection");
+}
+
+const { Content } = await render(entry);
 ---
 
-<Base
-  title="Home"
-  description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
->
-  <section class="mb-4 grid max-w-3xl grid-cols-1 gap-4 md:mb-8 md:gap-6">
-    <h1 class="text-2xl font-semibold md:text-4xl">Karl's blog</h1>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-      laboris nisi ut aliquip ex ea commodo consequat.
-    </p>
-  </section>
-
-  <section class="mb-4 grid max-w-3xl grid-cols-1 gap-4 md:mb-12">
-    <h2 class="border-mikado-600 border-b pb-4 text-xl font-semibold md:text-2xl">Latest posts</h2>
-    <RecentEntriesList contentCollection="posts" maxEntries={3} />
-  </section>
-</Base>
+<HTML entry={entry} type="webpage">
+  <Content />
+</HTML>

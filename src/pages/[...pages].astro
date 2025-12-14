@@ -1,0 +1,40 @@
+---
+import { type CollectionEntry, getEntry, render } from "astro:content";
+import { getPages } from "~/lib/collections/pages";
+import HTML from "~/components/layout/base/HTML.astro";
+
+type Props = {
+  entry?: CollectionEntry<"pages">;
+};
+
+export async function getStaticPaths() {
+  const entries = await getPages();
+
+  /* filter out _core pages */
+  const excludedSlugs = new Set(["index", "404", "search", "posts", "posts-terms"]);
+  const filtered = entries.filter((entry) => !excludedSlugs.has(entry.data.slug));
+
+  return filtered.map((entry) => ({
+    params: { pages: entry.data.slug },
+    props: { entry },
+  }));
+}
+
+let { entry } = Astro.props;
+
+/* 404 res */
+if (!entry) {
+  Astro.response.status = 404;
+  entry = await getEntry("pages", "404");
+
+  if (!entry) {
+    throw new Error("404 entry not found in 'pages' collection");
+  }
+}
+
+const { Content } = await render(entry);
+---
+
+<HTML collection="pages" entry={entry} type="webpage">
+  <Content />
+</HTML>

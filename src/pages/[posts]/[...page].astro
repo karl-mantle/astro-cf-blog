@@ -1,0 +1,38 @@
+---
+import type { GetStaticPathsOptions, Page } from "astro";
+import { type CollectionEntry, getEntry, render } from "astro:content";
+import { collectionsConfig } from "~/site.config";
+import { getPosts } from "~/lib/collections/posts";
+import HTML from "~/components/layout/base/HTML.astro";
+
+interface Props {
+  page: Page<CollectionEntry<"posts">>;
+}
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const posts = await getPosts();
+  return paginate(posts, {
+    params: { posts: collectionsConfig.permalink_posts },
+    pageSize: collectionsConfig.posts_per_page || 9,
+  });
+}
+
+const { page } = Astro.props as Props;
+
+const entry = await getEntry("pages", "posts");
+
+if (!entry) {
+  throw new Error("Index entry not found in 'pages' collection");
+}
+
+const { Content } = await render(entry);
+---
+
+<HTML
+  entry={entry}
+  page={page}
+  title=`${entry.data.title} page ${page.currentPage}`
+  type="collectionPage"
+>
+  <Content page={page} />
+</HTML>

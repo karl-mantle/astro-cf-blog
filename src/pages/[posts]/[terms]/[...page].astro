@@ -1,0 +1,77 @@
+---
+import type { GetStaticPathsOptions, GetStaticPathsResult, Page } from "astro";
+import { type CollectionEntry, getEntry, render } from "astro:content";
+import { collectionsConfig } from "~/site.config";
+import { getPostsTerms, getPostsByTag, getPostsByCategory } from "~/lib/collections/posts";
+import HTML from "~/components/layout/base/HTML.astro";
+
+type Terms = {
+  count?: number;
+  label: string;
+  slug: string;
+  type: string;
+};
+
+interface Props {
+  page: Page<CollectionEntry<"posts">>;
+  term: Terms;
+}
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const terms: Terms[] = await getPostsTerms();
+  let paths: GetStaticPathsResult = [];
+
+  for (const term of terms) {
+    const { label, slug, type } = term;
+
+    let entries;
+    switch (type) {
+      case "category":
+        entries = await getPostsByCategory(label);
+        break;
+      case "tag":
+        entries = await getPostsByTag(label);
+        break;
+      default:
+        entries = await getPostsByCategory(label);
+    }
+
+    const paginatedTerms = paginate(entries, {
+      params: { posts: collectionsConfig.permalink_posts, terms: `${type}/${slug}` },
+      pageSize: collectionsConfig.posts_per_page || 9,
+    });
+
+    paginatedTerms.forEach((path) => {
+      path.props = { ...path.props, term };
+    });
+
+    paths = paths.concat(paginatedTerms);
+  }
+
+  return paths;
+}
+
+const { page, term } = Astro.props as Props;
+
+const entry = await getEntry("pages", "posts-terms");
+
+if (!entry) {
+  throw new Error("Index entry not found in 'pages' collection");
+}
+
+const { Content } = await render(entry);
+---
+
+<HTML
+  description={term.type === "category"
+    ? `View all posts in the category “${term.label}”.`
+    : `View all posts tagged with “${term.label}”.`}
+  entry={entry}
+  page={page}
+  title={term.type === "category"
+    ? `“${term.label}” category archive page ${page.currentPage}`
+    : `“${term.label}” tag archive page ${page.currentPage}`}
+  type="collectionPage"
+>
+  <Content page={page} term={term} />
+</HTML>

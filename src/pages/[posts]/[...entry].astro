@@ -1,0 +1,76 @@
+---
+import { type CollectionEntry, render } from "astro:content";
+import { getPosts } from "~/lib/collections/posts";
+import { collectionsConfig } from "~/site.config";
+import HTML from "~/components/layout/base/HTML.astro";
+import Hero from "~/components/collections/posts/Hero.astro";
+import RelatedPosts from "~/components/collections/posts/RelatedPosts.astro";
+import ShareLinks from "~/components/ui/ShareLinks.astro";
+import TableOfContents from "~/components/ui/toc/TableOfContents.astro";
+import DetailsBox from "~/components/collections/posts/DetailsBox.astro";
+import PostNavigation from "~/components/collections/posts/PostNavigation.astro";
+
+type Props = {
+  entry: CollectionEntry<"posts">;
+  prevEntry: CollectionEntry<"posts">;
+  nextEntry: CollectionEntry<"posts">;
+};
+
+export async function getStaticPaths() {
+  const entries = await getPosts();
+  const entryCount = entries.length;
+  return entries.map((entry, index) => ({
+    params: { posts: collectionsConfig.permalink_posts_entry, entry: entry.data.slug },
+    props: {
+      entry,
+      prevEntry: index + 1 < entryCount ? entries[index + 1] : null,
+      nextEntry: index > 0 ? entries[index - 1] : null,
+    },
+  }));
+}
+
+const { entry, prevEntry, nextEntry } = Astro.props;
+const { Content, headings } = await render(entry);
+---
+
+<HTML collection="posts" entry={entry} tableOfContents={headings} type="article">
+  <TableOfContents headings={headings} />
+
+  <article class="contain mb-4 grid grid-cols-1 gap-4">
+    <Hero
+      authorId={entry.data.author ?? "default"}
+      category={entry.data.category}
+      date={entry.data.pubDate}
+      description={entry.data.description}
+      heading={entry.data.title}
+      image={entry.data.image}
+    />
+
+    {/* post body */}
+    <section class="typography mb-4 font-serif md:mb-8">
+      <Content />
+    </section>
+
+    {/* share links */}
+    <footer class="flex justify-between">
+      <ShareLinks
+        description="Share this post:"
+        display={["email", "facebook", "linkedin", "whatsapp"]}
+        title={entry.data.title}
+        url={Astro.url.toString()}
+      />
+      <PostNavigation nextEntry={nextEntry} prevEntry={prevEntry} />
+    </footer>
+  </article>
+
+  <aside class="contain">
+    {/* post meta */}
+    <DetailsBox entry={entry} />
+
+    {/* related posts */}
+    <section class="mb-4 flex flex-col gap-4 md:mb-12">
+      <h2>Related posts</h2>
+      <RelatedPosts category={entry.data.category} max={3} variant="image" class="!p-0" />
+    </section>
+  </aside>
+</HTML>
