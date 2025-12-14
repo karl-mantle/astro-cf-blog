@@ -1,0 +1,23 @@
+---
+import { Icon } from "astro-icon/components";
+
+const iconSize = 24;
+---
+
+<button
+  id="site-nav-toggle-btn"
+  class="hover:bg-mikado-200 dark:hover:bg-mikado-800 focus-visible:bg-focus-color cursor-pointer border-b-2 border-transparent p-2 transition-colors duration-300 focus-visible:border-black focus-visible:text-black md:hidden"
+  type="button"
+  aria-label="Toggle site navigation"
+  aria-controls="site-nav"
+  aria-expanded="false"
+>
+  <Icon id="site-nav-open-icon" name="material-symbols:menu" height={iconSize} width={iconSize} />
+  <Icon
+    id="site-nav-close-icon"
+    class="hidden"
+    name="material-symbols:close"
+    height={iconSize}
+    width={iconSize}
+  />
+</button>

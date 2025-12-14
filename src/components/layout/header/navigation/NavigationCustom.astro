@@ -1,0 +1,129 @@
+---
+import { Icon } from "astro-icon/components";
+import { getPostsCategories } from "src/lib/collections/posts";
+import NavigationDetails from "~/components/layout/header/navigation/NavigationDetails.astro";
+import TagCloud from "~/components/collections/generic/TagCloud.astro";
+import { generalConfig } from "~/site.config";
+import { collectionsConfig } from "~/site.config";
+
+type Terms = {
+  count?: number;
+  label: string;
+  slug: string;
+  type?: string;
+};
+
+const postsCategories: Terms[] = await getPostsCategories();
+---
+
+<nav
+  id="site-nav"
+  class="col-span-2 grid hidden grid-cols-1 font-medium md:mb-auto md:grid md:w-56"
+  aria-label="Site navigation"
+>
+  <NavigationDetails summary="Categories">
+    <ul
+      class="flex flex-col transition duration-300"
+      role="menu"
+      aria-label="Links to category pages"
+    >
+      {
+        postsCategories.map((category: Terms) => (
+          <li role="none">
+            <a
+              class="group/link border-mikado-500 hover:border-mikado-500 focus:text-mikado-950 focus:bg-mikado-200 focus-visible:bg-focus-color flex w-full items-center justify-between border-b bg-white/50 p-4 transition duration-300 focus-visible:border-black focus-visible:text-black md:border-transparent md:bg-transparent"
+              href={`${collectionsConfig.permalink_posts_category}${category.slug}`}
+              aria-label={`Link to ${category.label}`}
+              role="menuitem"
+            >
+              <span>{category.label}</span>
+              <Icon
+                name="material-symbols:arrow-right-alt"
+                height={18}
+                width={18}
+                class="group-hover/link:text-mikado-950 w-4 transition duration-500 group-focus/link:-rotate-45 group-focus/link:text-black md:text-transparent"
+              />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </NavigationDetails>
+
+  <NavigationDetails summary="Tags">
+    <TagCloud class="w-full p-4 transition duration-300" contentCollection="posts" />
+  </NavigationDetails>
+
+  <a
+    class="group/link hover:text-mikado-950 border-mikado-500 focus:text-mikado-950 focus:bg-mikado-200 focus-visible:bg-focus-color flex w-full cursor-pointer items-center justify-between gap-4 border-b p-4 transition duration-300 focus-visible:border-b-2 focus-visible:border-black focus-visible:text-black"
+    href="/posts"
+  >
+    <span>View all posts</span>
+    <Icon
+      class="group-hover/link:text-mikado-950 w-4 transition duration-300 group-focus/link:-rotate-45 group-focus/link:text-black md:text-transparent"
+      name="material-symbols:arrow-right-alt"
+      height={18}
+      width={18}
+    />
+  </a>
+
+  <form class="group/search relative flex" action="/search" method="GET">
+    <input
+      class="border-mikado-500 placeholder:text-mikado-900 group-hover/search:placeholder:text-mikado-950 focus:bg-mikado-100/25 ring-mikado-500 w-full border-0 border-b bg-transparent p-4 pr-12"
+      type="text"
+      name="q"
+      placeholder="Search"
+    />
+    <button
+      class="focus-visible:bg-focus-color group-hover/search:text-mikado-950 absolute top-1/2 right-4 -translate-y-1/2 transition duration-300 group-focus/search:text-black hover:cursor-pointer focus-visible:p-1 focus-visible:text-black"
+      type="submit"
+    >
+      <span class="sr-only">Search</span>
+      <Icon class="w-4.5" name="material-symbols:search" height={18} width={18} />
+    </button>
+  </form>
+</nav>
+
+<script>
+  function initNavigation() {
+    const nav = document.getElementById("site-nav");
+    const toggleButton = document.getElementById("site-nav-toggle-btn");
+    const iconOpen = document.getElementById("site-nav-open-icon");
+    const iconClose = document.getElementById("site-nav-close-icon");
+
+    let siteNavigationOpen = false;
+
+    const lockBodyScroll = (lock) => {
+      document.body.classList.toggle("h-full", lock);
+      document.body.classList.toggle("overflow-hidden", lock);
+    };
+
+    const updateNavUI = () => {
+      if (!nav || !toggleButton) return;
+
+      nav.classList.toggle("hidden", !siteNavigationOpen);
+      toggleButton.setAttribute("aria-expanded", String(siteNavigationOpen));
+
+      iconOpen?.classList.toggle("hidden", siteNavigationOpen);
+      iconClose?.classList.toggle("hidden", !siteNavigationOpen);
+
+      lockBodyScroll(siteNavigationOpen);
+    };
+
+    /* mobile nav toggle */
+    toggleButton?.addEventListener("click", () => {
+      siteNavigationOpen = !siteNavigationOpen;
+      updateNavUI();
+    });
+
+    /* close nav on escape */
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && siteNavigationOpen) {
+        siteNavigationOpen = false;
+        updateNavUI();
+      }
+    });
+  }
+
+  document.addEventListener("astro:page-load", initNavigation);
+</script>

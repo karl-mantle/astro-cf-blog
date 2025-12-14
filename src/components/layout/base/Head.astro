@@ -1,0 +1,64 @@
+---
+import "~/styles/global.css";
+import type { DataEntryMap } from "astro:content";
+import { getImage } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
+import { generalConfig } from "~/site.config";
+import defaultOpengraphImage from "public/opengraph.webp";
+
+interface Props {
+  description?: string;
+  entry: DataEntryMap[keyof DataEntryMap][string];
+  title?: string;
+}
+
+const { description, entry, title } = Astro.props;
+
+const metaTitle = `${title ?? entry.data.title} ${generalConfig.title_separator} ${generalConfig.name}`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageMeta = entry.data.image?.src ?? defaultOpengraphImage;
+const opengraphImage = await getImage({ src: imageMeta });
+---
+
+<head>
+  <meta charset="utf-8" />
+  <title data-pagefind-meta="title">{metaTitle}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="title" content={metaTitle} />
+  <meta name="description" content={description ?? entry.data.description} />
+  <meta name="generator" content={Astro.generator} />
+  <link rel="canonical" href={canonicalURL} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:title" content={metaTitle} />
+  <meta property="og:description" content={description ?? entry.data.description} />
+  <meta property="og:image" content={new URL(opengraphImage.src, Astro.url).toString()} />
+
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={Astro.url} />
+  <meta property="twitter:title" content={metaTitle} />
+  <meta property="twitter:description" content={description ?? entry.data.description} />
+  <meta property="twitter:image" content={new URL(opengraphImage.src, Astro.url).toString()} />
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title=`${generalConfig.name}`
+    href={new URL("rss.xml", Astro.site)}
+  />
+
+  {/* view transitions */}
+  <ClientRouter />
+
+  {/* google fonts - default noto */}
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet"
+  />
+
+  {/* slot for extras */}
+  <slot />
+</head>

@@ -79,7 +79,7 @@ export const socialLinks = [
     show: true,
   },
   {
-    href: "/astro-skeleton/rss.xml",
+    href: "/rss.xml",
     icon: "material-symbols:rss-feed",
     label: "Subscribe to RSS feed",
     show: true,

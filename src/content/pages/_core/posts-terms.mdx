@@ -1,0 +1,27 @@
+---
+title: "TERM_LABEL TERM_TYPE archive page PAGE_CURRENTPAGE"
+description: "View all posts in the TERM_TYPE TERM_LABEL"
+slug: "posts-terms"
+---
+
+import Section from "~/components/mdx/layout/Section.astro";
+import Markdown from "~/components/mdx/layout/Markdown.astro";
+import Archive from "~/components/collections/posts/Archive.astro";
+
+<Section class="contain mb-4 md:mb-12">
+<Markdown>
+
+{props.term.type === "category" &&
+
+<h1>All posts categorised as “{props.term.label}”</h1>}
+
+{props.term.type === "tag" &&
+
+<h1>All posts tagged with “{props.term.label}”</h1>}
+
+Now displaying {props.page.start + 1} to {props.page.end + 1} posts out of {props.page.total} posts.
+
+</Markdown>
+
+<Archive page={props.page} />
+</Section>

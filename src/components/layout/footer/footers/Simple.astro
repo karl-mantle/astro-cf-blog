@@ -1,0 +1,25 @@
+---
+import SocialLinks from "~/components/layout/footer/SocialLinks.astro";
+import ThemeBtn from "~/components/layout/footer/buttons/Theme.astro";
+import TextBtn from "~/components/ui/buttons/TextBtn.astro";
+---
+
+<footer
+  class="border-mikado-500 mt-4 mb-8 flex flex-col items-center justify-end gap-2 border-t pt-4 md:mt-0 md:items-end md:gap-y-4 md:border-t-0 md:border-r md:pt-0 md:pr-8 md:pb-4"
+>
+  <nav class="flex text-sm" aria-label="footer navigation">
+    <ul class="inline-flex gap-4">
+      <li>
+        <TextBtn label="Contact" href="/contact" />
+      </li>
+      <li>
+        <TextBtn label="Sitemap" href="/sitemap-0.xml" />
+      </li>
+    </ul>
+  </nav>
+
+  <div class="inline-flex gap-2">
+    <ThemeBtn />
+    <SocialLinks />
+  </div>
+</footer>

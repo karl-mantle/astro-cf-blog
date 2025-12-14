@@ -1,0 +1,28 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
+
+interface Props extends HTMLAttributes<"details"> {
+  summary: string;
+}
+
+const { summary, ...rest } = Astro.props;
+---
+
+<details class="group/details" {...rest}>
+  <summary
+    class="hover:text-mikado-950 border-mikado-500 focus:text-mikado-950 focus-visible:bg-focus-color flex w-full cursor-pointer list-none items-center justify-between gap-4 border-b p-4 transition duration-300 focus-visible:border-b-2 focus-visible:border-black focus-visible:text-black"
+    role="menuitem"
+    aria-haspopup="true"
+  >
+    <span>{summary}</span>
+    <Icon
+      class="w-4 transition duration-300 group-open/details:rotate-180"
+      name="material-symbols:keyboard-arrow-down"
+      height={16}
+      width={16}
+    />
+  </summary>
+
+  <slot />
+</details>

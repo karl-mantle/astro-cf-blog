@@ -1,0 +1,56 @@
+---
+import type { DataEntryMap } from "astro:content";
+import type { HTMLAttributes } from "astro/types";
+import { collectionsConfig } from "~/site.config";
+import { getPostsTagsCount } from "~/lib/collections/posts";
+import slugify from "slugify";
+import TextBtn from "~/components/ui/buttons/TextBtn.astro";
+
+interface Props extends HTMLAttributes<"ul"> {
+  contentCollection: keyof DataEntryMap;
+}
+
+const { contentCollection, class: className, ...rest } = Astro.props;
+
+let tags;
+let tagsPermalink: string;
+switch (contentCollection) {
+  case "posts":
+    tags = await getPostsTagsCount();
+    tagsPermalink = collectionsConfig.permalink_posts_tag;
+    break;
+  default:
+    tags = await getPostsTagsCount();
+    break;
+}
+const threshold = 2;
+const filteredTags = tags.filter((tag) => (tag.count ?? 0) >= threshold);
+
+function getTagSize(count?: number): string {
+  if (count) {
+    const size = Math.min(0.5 + count * 0.15, 2);
+    return `${size}rem`;
+  } else {
+    return "1rem";
+  }
+}
+---
+
+<ul
+  class:list={["not-prose flex flex-wrap gap-1 px-1", className]}
+  aria-label={`List of ${contentCollection} tags`}
+  {...rest}
+>
+  {
+    filteredTags.map((tag) => (
+      <li>
+        <TextBtn
+          style={`font-size: ${getTagSize(tag.count)}`}
+          href={`${tagsPermalink}${slugify(tag.label, { lower: true })}`}
+          label={`#${tag.label.toLowerCase()}`}
+          aria-label={`View ${contentCollection} tagged with ${tag.label}`}
+        />
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,21 @@
+---
+title: "Posts archive"
+description: "View all posts on this website."
+slug: "posts"
+---
+
+import Section from "~/components/mdx/layout/Section.astro";
+import Markdown from "~/components/mdx/layout/Markdown.astro";
+import Archive from "~/components/collections/posts/Archive.astro";
+
+<Section class="contain mb-4 md:mb-12">
+<Markdown>
+
+# Viewing all posts
+
+Now displaying {props.page.start + 1} to {props.page.end + 1} posts out of {props.page.total} posts.
+
+</Markdown>
+
+<Archive page={props.page} />
+</Section>

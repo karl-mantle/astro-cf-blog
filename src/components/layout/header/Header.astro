@@ -1,0 +1,30 @@
+---
+import { Image } from "astro:assets";
+import { generalConfig } from "~/site.config";
+import NavigationBtn from "~/components/layout/header/buttons/Navigation.astro";
+import NavigationCustom from "./navigation/NavigationCustom.astro";
+import SiteLogo from "~/assets/svg/logo-1-1.svg";
+---
+
+<header
+  id="site-header"
+  class="border-mikado-500 grid max-h-full grid-cols-[1fr_auto] content-start overflow-y-auto border-r p-4 md:mt-8 md:h-[calc(100%-2rem)] md:grid-cols-1 md:gap-y-4 md:place-self-end md:pr-8"
+>
+  <div class="flex justify-between">
+    <a
+      class="group/logo focus-visible:bg-focus-color inline-flex items-center gap-3 border-b-2 border-transparent p-1 transition duration-500 focus-visible:border-black"
+      href="/"
+      aria-label="Return to home page"
+    >
+      <Image class="aspect-square w-8 object-contain" src={SiteLogo} alt="" format="svg" />
+      <span
+        class="group-hover/logo:border-mikado-900 border-b border-transparent py-1 text-xl leading-none font-medium transition duration-500 group-focus/logo:border-b-2 group-focus-visible/logo:text-black"
+        >{generalConfig.name}</span
+      >
+    </a>
+
+    <NavigationBtn />
+  </div>
+
+  <NavigationCustom />
+</header>

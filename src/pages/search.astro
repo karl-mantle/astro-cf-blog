@@ -1,19 +1,20 @@
 ---
-import Base from "~/layouts/Base.astro";
+import { getEntry } from "astro:content";
+import HTML from "~/components/layout/base/HTML.astro";
+
+const entry = await getEntry("pages", "search");
+
+if (!entry) {
+  throw new Error("Search entry not found in 'pages' collection");
+}
 ---
 
-<Base
-  title="Search"
-  description="Search the site to find pages, posts, and other content. Use keywords to locate relevant results."
-  loadingOptions={{
-    loadPagefind: true,
-  }}
->
-  <section class="relative mb-4 grid max-w-3xl grid-cols-1 place-content-start gap-4 md:mb-12">
-    <h1 class="text-2xl font-medium md:text-3xl">Search this site</h1>
+<HTML entry={entry} type="searchResultsPage">
+  <section class="contain relative mb-4 grid grid-cols-1 place-content-start gap-4 md:mb-12">
+    <h1>Search this site</h1>
     <div id="search" class="w-full"></div>
   </section>
-</Base>
+</HTML>
 
 <script>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -40,8 +41,96 @@ import Base from "~/layouts/Base.astro";
     if (searchString) {
       pagefind.triggerSearch(searchString);
     }
+
+    /* filter js */
+    const filterObserver = new MutationObserver(() => {
+      const filterBlocks = document.querySelectorAll(".pagefind-ui__filter-block");
+      if (filterBlocks.length > 0) {
+        filterObserver.disconnect();
+
+        function closeOtherFilters(exclude = null) {
+          filterBlocks.forEach((details) => {
+            if (details !== exclude) details.removeAttribute("open");
+          });
+        }
+
+        const filterPanel = document.querySelector(".pagefind-ui__filter-panel");
+
+        /* filter panel toggle */
+        if (filterPanel && !document.querySelector(".pagefind-ui__filter-button")) {
+          const filterBtn = document.createElement("button");
+          filterBtn.className = "pagefind-ui__filter-button";
+          filterBtn.type = "button";
+
+          /* filter button icon */
+          const svgNS = "http://www.w3.org/2000/svg";
+          const filterIcon = document.createElementNS(svgNS, "svg");
+          filterIcon.setAttribute("viewBox", "0 0 24 24");
+          filterIcon.setAttribute("width", "24");
+          filterIcon.setAttribute("height", "24");
+          filterIcon.innerHTML = `<path fill="currentColor" d="M10 18v-2h4v2zm-4-5v-2h12v2zM3 8V6h18v2z"/>`;
+
+          /* create button contents */
+          const btnText = document.createElement("span");
+          btnText.textContent = "Show filters";
+          filterBtn.append(filterIcon, btnText);
+
+          /* inject button */
+          const form = document.querySelector(".pagefind-ui__form");
+          const ui = document.querySelector(".pagefind-ui__drawer");
+          form.insertBefore(filterBtn, ui);
+
+          /* toggle behaviour */
+          filterPanel.style.display = "none";
+          filterBtn.addEventListener("click", () => {
+            const isHidden = filterPanel.style.display === "none";
+            filterPanel.style.display = isHidden ? "flex" : "none";
+            btnText.textContent = isHidden ? "Hide filters" : "Show filters";
+          });
+        }
+
+        /* filter behaviour */
+        filterBlocks.forEach((details) => {
+          /* close filter on filter selection */
+          details.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+            checkbox.addEventListener("change", () => {
+              setTimeout(() => {
+                details.removeAttribute("open");
+              }, 300);
+            });
+          });
+
+          /* close filters on other filter open */
+          details.addEventListener("toggle", () => {
+            if (details.open) closeOtherFilters(details);
+          });
+
+          /* inject chevron svg */
+          details.querySelectorAll("summary").forEach((summary) => {
+            const svgNS = "http://www.w3.org/2000/svg";
+            const chevron = document.createElementNS(svgNS, "svg");
+            chevron.setAttribute("viewBox", "0 0 24 24");
+            chevron.setAttribute("width", "24");
+            chevron.setAttribute("height", "24");
+            chevron.innerHTML = `<path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+            chevron.style.transition = "transform 0.3s ease";
+            summary.prepend(chevron);
+
+            const details = summary.parentElement;
+            details.addEventListener("toggle", () => {
+              chevron.style.transform = details.open ? "rotate(90deg)" : "rotate(0deg)";
+            });
+          });
+        });
+      }
+    });
+
+    filterObserver.observe(document.querySelector("#search"), {
+      childList: true,
+      subtree: true,
+    });
   }
-  document.addEventListener("DOMContentLoaded", initSearch);
+
   document.addEventListener("astro:page-load", initSearch);
 </script>
 
@@ -49,15 +138,15 @@ import Base from "~/layouts/Base.astro";
   @reference "~/styles/global.css";
 
   .pagefind-ui__form {
-    @apply flex flex-col gap-2;
+    @apply relative flex flex-col gap-2 md:gap-4;
   }
 
   .pagefind-ui__search-input {
-    @apply border-mikado-500 focus:text-mikado-950 focus:bg-mikado-100/25 ring-mikado-500 placeholder:text-mikado-900 hover:placeholder:text-mikado-950 border bg-transparent p-4;
+    @apply border-mikado-500 dark:border-mikado-200 focus:text-mikado-950 focus:bg-mikado-100/25 dark:focus:bg-mikado-800 ring-mikado-500 placeholder:text-mikado-900 dark:placeholder:text-mikado-50 hover:placeholder:text-mikado-950 w-full border bg-transparent p-4 dark:hover:placeholder:text-white dark:focus:text-white;
   }
 
   .pagefind-ui__search-clear {
-    @apply hover:border-mikado-950 focus-visible:bg-mikado-300 hover:text-mikado-950 absolute top-18 right-6 w-fit cursor-pointer border-b border-transparent text-sm focus:border-b-2 focus-visible:border-black focus-visible:p-1 focus-visible:text-black;
+    @apply hover:border-mikado-950 focus-visible:bg-focus-color hover:text-mikado-950 absolute top-5 right-5 w-fit cursor-pointer border-b-2 border-transparent text-sm focus-visible:border-black focus-visible:p-1 focus-visible:text-black dark:hover:border-white dark:hover:text-white;
   }
 
   .pagefind-ui__message {
@@ -65,19 +154,25 @@ import Base from "~/layouts/Base.astro";
   }
 
   .pagefind-ui__drawer {
-    @apply h-full overflow-y-auto;
+    @apply h-full;
   }
+
+  .pagefind-ui__button {
+    @apply border-mikado-500 focus-visible:bg-focus-color dark:hover:text-mikado-950 hover:bg-mikado-950 hover:border-mikado-950 flex cursor-pointer items-center justify-center border-2 bg-transparent p-2 px-4 transition duration-300 hover:text-white focus-visible:border-black focus-visible:text-black dark:hover:border-white dark:hover:bg-white;
+  }
+
+  /* results */
 
   .pagefind-ui__result {
     @apply border-mikado-500 my-4 border-b;
   }
 
   .pagefind-ui__result mark {
-    @apply bg-mikado-300;
+    @apply bg-focus-color;
   }
 
   .pagefind-ui__result-link {
-    @apply hover:text-mikado-950 focus-visible:bg-mikado-300 font-semibold underline-offset-4 hover:underline focus:decoration-2 focus-visible:p-1 focus-visible:text-black;
+    @apply hover:text-mikado-950 focus-visible:bg-focus-color font-semibold underline-offset-4 hover:underline focus:decoration-2 focus-visible:p-1 focus-visible:text-black dark:hover:text-white;
   }
 
   .pagefind-ui__result-title {
@@ -88,7 +183,61 @@ import Base from "~/layouts/Base.astro";
     @apply my-2;
   }
 
-  .pagefind-ui__button {
-    @apply border-mikado-500 focus-visible:bg-mikado-300 hover:bg-mikado-100/25 hover:border-mikado-950 hover:text-mikado-950 mr-auto flex cursor-pointer items-center justify-center border bg-transparent p-2 px-4 transition duration-300 hover:border-2 focus-visible:border-black focus-visible:text-black;
+  /* filters */
+
+  .pagefind-ui__filter-button {
+    /* injected button -> not part of pagefind */
+    @apply border-mikado-900 dark:border-mikado-50 focus-visible:bg-focus-color dark:hover:text-mikado-950 hover:bg-mikado-950 hover:border-mikado-950 flex w-full cursor-pointer items-center justify-center gap-2 border-2 bg-transparent p-2 px-4 transition duration-300 hover:text-white focus-visible:border-black focus-visible:text-black md:w-48 dark:hover:border-white dark:hover:bg-white;
+  }
+
+  .pagefind-ui__filter-panel {
+    /* fieldset */
+    @apply mb-2 flex flex-col leading-none md:mb-4 md:flex-row md:gap-4;
+  }
+
+  .pagefind-ui__filter-panel-label {
+    /* legend - Filters */
+    @apply mb-2 font-medium md:mb-4;
+  }
+
+  .pagefind-ui__filter-block {
+    /* details */
+    @apply bg-mikado-200 dark:bg-mikado-900 cursor-pointer p-2 md:relative md:px-4;
+  }
+
+  .pagefind-ui__filter-block[open] {
+    /* details - open state */
+    @apply bg-mikado-300 dark:bg-mikado-800;
+  }
+
+  .pagefind-ui__filter-name {
+    /* summary */
+    @apply flex list-none items-center gap-2 font-medium;
+
+    &::-webkit-details-marker {
+      /* safari lol */
+      display: none;
+    }
+  }
+
+  .pagefind-ui__filter-group {
+    /* fieldset -> filter choices */
+    @apply bg-mikado-300 dark:bg-mikado-800 flex w-full flex-col gap-2 p-4 md:absolute md:top-full md:left-0;
+  }
+
+  .pagefind-ui__filter-group-label {
+    /* legend -> filter choice label - seems visually redundant */
+    @apply sr-only;
+  }
+
+  .pagefind-ui__filter-value {
+    /* value is the container for each filter checkbox/label */
+    @apply flex items-center gap-2 md:text-nowrap;
+  }
+
+  .pagefind-ui__filter-checkbox {
+  }
+
+  .pagefind-ui__filter-label {
   }
 </style>

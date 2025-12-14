@@ -1,0 +1,24 @@
+---
+import { socialLinks } from "~/site.config";
+import IconBtn from "~/components/ui/buttons/IconBtn.astro";
+
+const { class: className } = Astro.props;
+---
+
+<ul class:list={["flex items-center gap-2", className]} aria-label="Social links">
+  {
+    socialLinks
+      .filter((link) => link.show)
+      .map((link) => (
+        <li class="flex">
+          <IconBtn
+            icon={link.icon}
+            iconSize={21}
+            href={link.href}
+            label={link.label}
+            openNewTab={true}
+          />
+        </li>
+      ))
+  }
+</ul>
