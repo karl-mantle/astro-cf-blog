@@ -1,0 +1,106 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Marker = {
+  latitude: number;
+  longitude: number;
+  popup?: string;
+};
+
+interface Props extends HTMLAttributes<"figure"> {
+  mapOptions: {
+    attribution: string;
+    caption?: string;
+    id: string;
+    latitude: number;
+    longitude: number;
+    markers: Marker[];
+    tileLayer: string;
+    zoom: number;
+  };
+}
+
+const { mapOptions, class: className, ...rest }: Props = Astro.props;
+---
+
+<figure
+  class:list={["mb-4 flex w-full flex-col justify-center gap-4 md:mb-8", className]}
+  {...rest}
+  role="group"
+  aria-labelledby={`${mapOptions.id}-caption`}
+>
+  <div
+    id={mapOptions.id}
+    class="relative isolate aspect-square w-full md:aspect-video"
+    role="region"
+    aria-label="Interactive map"
+    data-latitude={mapOptions.latitude}
+    data-longitude={mapOptions.longitude}
+    data-zoom={mapOptions.zoom}
+    data-tile-layer={mapOptions.tileLayer}
+    data-attribution={mapOptions.attribution}
+    data-markers={JSON.stringify(mapOptions.markers ?? [])}
+  >
+  </div>
+  {
+    mapOptions.caption && (
+      <figcaption id={`${mapOptions.id}-caption`} class="text-center text-sm">
+        {mapOptions.caption}
+      </figcaption>
+    )
+  }
+  <slot />
+</figure>
+
+<script>
+  import L from "leaflet";
+  import "leaflet/dist/leaflet.css";
+  import icon from "leaflet/dist/images/marker-icon.png";
+  import iconRetina from "leaflet/dist/images/marker-icon-2x.png";
+  import shadow from "leaflet/dist/images/marker-shadow.png";
+
+  export function setupLeafletIcons() {
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: iconRetina.src,
+      iconUrl: icon.src,
+      shadowUrl: shadow.src,
+    });
+  }
+
+  function initLeafletMaps() {
+    const mapEls = document.querySelectorAll("[data-latitude][data-longitude][data-zoom]");
+    mapEls.forEach((el) => {
+      if ((el as HTMLElement).dataset.initialized) return;
+      (el as HTMLElement).dataset.initialized = "true";
+
+      const attribution = el.getAttribute("data-attribution")!;
+      const latitude = parseFloat(el.getAttribute("data-latitude")!);
+      const longitude = parseFloat(el.getAttribute("data-longitude")!);
+      const tileLayer = el.getAttribute("data-tile-layer")!;
+      const zoom = parseInt(el.getAttribute("data-zoom")!);
+
+      const map = L.map(el.id).setView([latitude, longitude], zoom);
+      L.tileLayer(tileLayer, { attribution }).addTo(map);
+
+      L.Icon.Default.mergeOptions({
+        iconUrl: icon.src,
+        iconRetinaUrl: iconRetina.src,
+        shadowUrl: shadow.src,
+      });
+
+      const markersJSON = el.getAttribute("data-markers")!;
+      const markers = JSON.parse(markersJSON) as {
+        latitude: number;
+        longitude: number;
+        popup?: string;
+      }[];
+
+      markers.forEach((marker) => {
+        const m = L.marker([marker.latitude, marker.longitude]).addTo(map);
+        if (marker.popup) m.bindPopup(marker.popup);
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", initLeafletMaps);
+</script>

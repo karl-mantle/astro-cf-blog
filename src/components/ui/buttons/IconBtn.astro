@@ -1,0 +1,49 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
+
+interface Props extends HTMLAttributes<"a"> {
+  disabled?: boolean;
+  label: string;
+  icon: string;
+  iconSize?: number;
+  openNewTab?: boolean;
+}
+
+const {
+  disabled,
+  label,
+  icon,
+  iconSize = 21,
+  openNewTab,
+  href,
+  class: className,
+  ...rest
+}: Partial<Props> = Astro.props;
+
+const newTabAttributes = openNewTab ? { target: "_blank", rel: "noreferrer noopener" } : {};
+---
+
+<a
+  class:list={[
+    "not-prose hover:bg-mikado-200 dark:hover:bg-mikado-800 focus-visible:bg-focus-color hover:text-mikado-950 w-fit border-b-2 border-transparent p-2 transition-colors duration-300 focus-visible:border-black focus-visible:text-black dark:hover:text-white",
+    disabled && "text-mikado-200 dark:text-mikado-800 cursor-not-allowed",
+    className,
+  ]}
+  href={disabled ? undefined : href}
+  tabindex={disabled ? "-1" : undefined}
+  aria-disabled={disabled ? "true" : undefined}
+  {...newTabAttributes}
+  {...rest}
+>
+  <span class="sr-only">{label}</span>
+
+  {openNewTab && <span class="sr-only">(opens in a new tab)</span>}
+
+  <Icon
+    class="self-center transition-all duration-300"
+    name={icon}
+    height={iconSize}
+    width={iconSize}
+  />
+</a>

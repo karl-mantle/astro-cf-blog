@@ -1,6 +1,6 @@
 ---
-import { shareLinks, createShareUrl } from "~/utils/share";
-import Button from "~/components/ui/Button.astro";
+import { shareLinks, createShareUrl } from "~/lib/share";
+import IconBtn from "~/components/ui/buttons/IconBtn.astro";
 
 interface Props {
   description?: string;
@@ -20,19 +20,21 @@ const {
 <div class="flex items-center justify-between gap-2">
   {description && <span class="mr-2 font-medium">{description}</span>}
 
-  <div class="flex gap-1">
+  <ul class="flex gap-1" aria-label="Share this page">
     {
       shareLinks
         .filter((link) => display.includes(link.name))
         .map((link) => (
-          <Button
-            icon={link.icon}
-            iconSize={21}
-            href={createShareUrl(link.name, title, url)}
-            aria-label={link.label}
-            openNewTab={true}
-          />
+          <li class="flex">
+            <IconBtn
+              icon={link.icon}
+              iconSize={21}
+              href={createShareUrl(link.name, title, url)}
+              label={link.label}
+              openNewTab={true}
+            />
+          </li>
         ))
     }
-  </div>
+  </ul>
 </div>

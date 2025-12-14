@@ -1,0 +1,44 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import IconBtn from "~/components/ui/buttons/IconBtn.astro";
+import PrimaryBtn from "~/components/ui/buttons/PrimaryBtn.astro";
+import SecondaryBtn from "~/components/ui/buttons/SecondaryBtn.astro";
+import TextBtn from "~/components/ui/buttons/TextBtn.astro";
+
+interface Props extends HTMLAttributes<"div"> {
+  btns: {
+    href: string;
+    label: string;
+    type: "primary" | "secondary" | "text" | "icon";
+    icon?: string;
+  }[];
+}
+
+const { btns, class: className, ...rest }: Partial<Props> = Astro.props;
+---
+
+<div
+  class:list={["flex w-full flex-col gap-2 md:flex-row md:flex-wrap md:gap-4", className]}
+  {...rest}
+>
+  {
+    btns.map((btn) => (
+      <>
+        {btn.type === "primary" && (
+          <PrimaryBtn href={btn.href} label={btn.label} icon={btn.icon ?? ""} />
+        )}
+        {btn.type === "secondary" && (
+          <SecondaryBtn href={btn.href} label={btn.label} icon={btn.icon ?? ""} />
+        )}
+        {btn.type === "text" && <TextBtn href={btn.href} label={btn.label} icon={btn.icon ?? ""} />}
+        {btn.type === "icon" && (
+          <IconBtn
+            href={btn.href}
+            label={btn.label}
+            icon={btn.icon ?? "material-symbols:indeterminate-question-box"}
+          />
+        )}
+      </>
+    ))
+  }
+</div>

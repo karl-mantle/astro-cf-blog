@@ -36,7 +36,16 @@ const formattedDate = `${day}${ordinal(day)} ${month} ${year}`;
   datetime={date.toISOString()}
   lang="en-GB"
 >
-  {!hideIcon && <Icon name="ri:calendar-line" height={21} width={21} class="self-center" />}
+  {
+    !hideIcon && (
+      <Icon
+        name="material-symbols:calendar-today-outline"
+        height={21}
+        width={21}
+        class="self-center"
+      />
+    )
+  }
 
-  <span class="p-1 leading-none font-medium">{formattedDate}</span>
+  <span class="p-1 leading-none">{formattedDate}</span>
 </time>

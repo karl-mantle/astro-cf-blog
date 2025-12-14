@@ -1,0 +1,23 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"section"> {
+  columns: number;
+}
+
+const { columns, class: className }: Props = Astro.props;
+---
+
+<section
+  class:list={[
+    "grid grid-cols-1 gap-4",
+    columns === 2 && "md:grid-cols-2",
+    columns === 3 && "md:grid-cols-3",
+    columns === 4 && "md:grid-cols-4",
+    columns === 5 && "md:grid-cols-5",
+    columns === 6 && "md:grid-cols-6",
+    className,
+  ]}
+>
+  <slot />
+</section>

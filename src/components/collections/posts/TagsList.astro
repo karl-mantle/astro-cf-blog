@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { collectionsConfig } from "~/site.config";
+import slugify from "slugify";
+import TextBtn from "~/components/ui/buttons/TextBtn.astro";
+
+interface Props extends HTMLAttributes<"ul"> {
+  tags: string[];
+}
+
+const { tags }: Props = Astro.props;
+---
+
+<ul class="flex flex-wrap gap-3 px-1 text-sm" aria-label="Tags for this post">
+  {
+    tags.map((tag) => (
+      <li>
+        <TextBtn
+          href={`${collectionsConfig.permalink_posts_tag}${slugify(tag, { lower: true })}`}
+          label={`#${tag.toLowerCase()}`}
+          data-pagefind-filter={`tag:${tag.toLowerCase()}`}
+        />
+      </li>
+    ))
+  }
+</ul>

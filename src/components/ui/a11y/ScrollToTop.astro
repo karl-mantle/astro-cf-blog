@@ -1,0 +1,45 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div
+  id="scroll-to-top"
+  class="pointer-events-none fixed right-5 bottom-5 z-45 hidden w-16 opacity-0 transition-colors duration-300 md:right-2 md:bottom-2"
+>
+  <button
+    id="scroll-to-top-btn"
+    class="bg-mikado-200 dark:bg-mikado-800 hover:bg-mikado-300 dark:hover:bg-mikado-900 hover:text-mikado-950 focus-visible:bg-focus-color flex w-full cursor-pointer items-center p-4 transition-colors duration-300 focus-visible:border-black focus-visible:text-black dark:hover:text-white"
+    type="button"
+    aria-label="Scroll to top button"
+  >
+    <Icon name="material-symbols:arrow-upward" height={32} width={32} />
+  </button>
+</div>
+
+<script>
+  function initScrollToTop() {
+    const buttonContainer = document.getElementById("scroll-to-top");
+    const button = document.getElementById("scroll-to-top-btn");
+
+    function updateScroll() {
+      const scrollPosition = window.scrollY;
+      if (scrollPosition > 2 * window.innerHeight) {
+        buttonContainer?.classList.remove("opacity-0", "hidden", "pointer-events-none");
+      } else {
+        buttonContainer?.classList.add("opacity-0", "hidden", "pointer-events-none");
+      }
+    }
+
+    updateScroll();
+
+    window.addEventListener("scroll", updateScroll);
+
+    button?.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      const main = document.getElementById("main");
+      main?.focus();
+    });
+  }
+
+  document.addEventListener("astro:page-load", initScrollToTop);
+</script>

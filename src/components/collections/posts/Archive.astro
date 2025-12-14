@@ -1,0 +1,33 @@
+---
+import type { Page } from "astro";
+import type { HTMLAttributes } from "astro/types";
+import type { CollectionEntry } from "astro:content";
+import { collectionsConfig } from "~/site.config";
+import CardRow from "~/components/collections/posts/CardRow.astro";
+import SimplePagination from "~/components/ui/pagination/Simple.astro";
+
+interface Props extends HTMLAttributes<"div"> {
+  page: Page<CollectionEntry<"posts">>;
+}
+
+const { page, class: className }: Props = Astro.props;
+---
+
+<div class:list={["flex flex-col gap-4 md:gap-8", className]}>
+  <ol class="grid grid-cols-1 gap-4 md:gap-8" aria-label="Posts, most recent first">
+    {
+      page.data.map((post) => (
+        <CardRow
+          date={post.data.pubDate}
+          description={post.data.description}
+          heading={post.data.title}
+          href={`${collectionsConfig.permalink_posts_entry}${post.data.slug}`}
+          image={post.data.image}
+          loading="eager"
+        />
+      ))
+    }
+  </ol>
+
+  <SimplePagination page={page} aria-label="Posts pagination" />
+</div>
