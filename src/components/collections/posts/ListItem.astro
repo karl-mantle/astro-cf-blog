@@ -1,0 +1,43 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { collectionsConfig } from "~/site.config";
+import slugify from "slugify";
+import TextBtn from "~/components/ui/buttons/TextBtn.astro";
+import Date from "~/components/ui/Date.astro";
+
+interface Props extends HTMLAttributes<"li"> {
+  category: string;
+  date: Date;
+  description: string;
+  heading: string;
+  href: string;
+}
+
+const { category, date, description, heading, href }: Props = Astro.props;
+---
+
+<li>
+  <article class="flex flex-col gap-2">
+    <h3>{heading}</h3>
+
+    <div class="flex items-baseline gap-1 text-sm font-medium">
+      <Date date={date} />
+      <span>|</span>
+      <TextBtn
+        href={`${collectionsConfig.permalink_posts_category}${slugify(category, { lower: true })}`}
+        label={category}
+      />
+    </div>
+
+    <p>{description}</p>
+
+    <TextBtn
+      class="mt-2 -ml-1 font-semibold"
+      href={href}
+      icon="material-symbols:arrow-right-alt"
+      iconAnimate={true}
+      label="Continue reading"
+      aria-label={`Continue reading: ${heading}`}
+    />
+  </article>
+</li>

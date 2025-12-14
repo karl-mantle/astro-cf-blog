@@ -1,0 +1,38 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { HTMLAttributes } from "astro/types";
+import { collectionsConfig } from "~/site.config";
+import IconBtn from "~/components/ui/buttons/IconBtn.astro";
+
+interface Props extends HTMLAttributes<"nav"> {
+  nextEntry: CollectionEntry<"posts">;
+  prevEntry: CollectionEntry<"posts">;
+}
+
+const { nextEntry, prevEntry }: Props = Astro.props;
+---
+
+<nav class="hidden justify-between gap-4 px-4 md:flex" aria-label="Post navigation">
+  {
+    prevEntry && (
+      <IconBtn
+        href={`${collectionsConfig.permalink_posts_entry}${prevEntry.data.slug}`}
+        label={`Previous post: ${prevEntry.data.title}`}
+        icon="material-symbols:keyboard-arrow-left"
+        iconSize={24}
+        class="rounded-4xl"
+      />
+    )
+  }
+  {
+    nextEntry && (
+      <IconBtn
+        href={`${collectionsConfig.permalink_posts_entry}${nextEntry.data.slug}`}
+        label={`Next post: ${nextEntry.data.title}`}
+        icon="material-symbols:keyboard-arrow-right"
+        iconSize={24}
+        class="rounded-4xl"
+      />
+    )
+  }
+</nav>

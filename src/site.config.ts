@@ -40,10 +40,10 @@ export const measurementConfig = {
 
 export const collectionsConfig = {
   posts_per_page: 9,
-  permalink_posts: "/posts",
-  permalink_posts_entry: "collections/posts/entry/",
-  permalink_posts_category: "posts/category/",
-  permalink_posts_tag: "posts/tag/",
+  permalink_posts: "/posts/",
+  permalink_posts_entry: "/posts/entry/",
+  permalink_posts_category: "/posts/category/",
+  permalink_posts_tag: "/posts/tag/",
 };
 
 export const imagesConfig = {

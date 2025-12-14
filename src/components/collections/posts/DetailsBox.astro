@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { HTMLAttributes } from "astro/types";
+import TagsList from "~/components/collections/posts/TagsList.astro";
+
+interface Props extends HTMLAttributes<"li"> {
+  entry: CollectionEntry<"posts">;
+}
+
+const { entry }: Props = Astro.props;
+---
+
+<section class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+  <h2 class="sr-only">Post Details</h2>
+
+  <div class="flex flex-col gap-4">
+    <h3>Description</h3>
+    <p class="text-base">{entry.data.description}</p>
+  </div>
+
+  <div class="flex flex-col gap-4">
+    <h3>Tagged</h3>
+    <TagsList tags={entry.data.tags} />
+  </div>
+</section>
