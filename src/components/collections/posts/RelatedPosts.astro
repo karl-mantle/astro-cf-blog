@@ -12,10 +12,18 @@ interface Props extends HTMLAttributes<"ol"> {
   category: string;
   columns?: number;
   max?: number;
+  loading?: "eager" | "lazy";
   variant: "default" | "list" | "image" | "preview" | "row";
 }
 
-const { category, columns = 3, max = 3, variant = "image", class: className }: Props = Astro.props;
+const {
+  category,
+  columns = 3,
+  max = 3,
+  loading,
+  variant = "image",
+  class: className,
+}: Props = Astro.props;
 
 const entries = await getPostsByCategory(category, max);
 ---
@@ -38,6 +46,7 @@ const entries = await getPostsByCategory(category, max);
           heading={entry.data.title}
           href={`${collectionsConfig.permalink_posts_entry}${entry.data.slug}`}
           image={entry.data.image}
+          loading={loading}
         />
       ))
   }
@@ -49,6 +58,7 @@ const entries = await getPostsByCategory(category, max);
           heading={entry.data.title}
           href={`${collectionsConfig.permalink_posts_entry}${entry.data.slug}`}
           image={entry.data.image}
+          loading={loading}
         />
       ))
   }
@@ -61,6 +71,7 @@ const entries = await getPostsByCategory(category, max);
           heading={entry.data.title}
           href={`${collectionsConfig.permalink_posts_entry}${entry.data.slug}`}
           image={entry.data.image}
+          loading={loading}
         />
       ))
   }
@@ -86,6 +97,7 @@ const entries = await getPostsByCategory(category, max);
           heading={entry.data.title}
           href={`${collectionsConfig.permalink_posts_entry}${entry.data.slug}`}
           image={entry.data.image}
+          loading={loading}
         />
       ))
   }

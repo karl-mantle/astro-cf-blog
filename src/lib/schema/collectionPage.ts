@@ -13,8 +13,6 @@ export function createCollectionPage(url: URL, entry: CollectionEntry<"pages">, 
     itemList: `${canonicalUrl}#item-list`,
   };
 
-  console.log(page);
-
   return {
     "@context": "https://schema.org",
     "@graph": [

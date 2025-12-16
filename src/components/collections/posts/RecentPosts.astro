@@ -11,10 +11,11 @@ import PostPreview from "~/components/collections/posts/PostPreview.astro";
 interface Props extends HTMLAttributes<"ol"> {
   columns?: number;
   max?: number;
+  loading?: "eager" | "lazy";
   variant: "default" | "list" | "image" | "preview" | "row";
 }
 
-const { columns = 3, max = 3, variant = "default" }: Props = Astro.props;
+const { columns = 3, max = 3, loading, variant = "default" }: Props = Astro.props;
 
 const entries = await getPosts(max);
 ---
@@ -36,6 +37,7 @@ const entries = await getPosts(max);
           heading={entry.data.title}
           href={`${collectionsConfig.permalink_posts_entry}${entry.data.slug}`}
           image={entry.data.image}
+          loading={loading}
         />
       ))
   }
@@ -47,6 +49,7 @@ const entries = await getPosts(max);
           heading={entry.data.title}
           href={`${collectionsConfig.permalink_posts_entry}${entry.data.slug}`}
           image={entry.data.image}
+          loading={loading}
         />
       ))
   }
@@ -59,6 +62,7 @@ const entries = await getPosts(max);
           heading={entry.data.title}
           href={`${collectionsConfig.permalink_posts_entry}${entry.data.slug}`}
           image={entry.data.image}
+          loading={loading}
         />
       ))
   }
@@ -84,6 +88,7 @@ const entries = await getPosts(max);
           heading={entry.data.title}
           href={`${collectionsConfig.permalink_posts_entry}${entry.data.slug}`}
           image={entry.data.image}
+          loading={loading}
         />
       ))
   }
