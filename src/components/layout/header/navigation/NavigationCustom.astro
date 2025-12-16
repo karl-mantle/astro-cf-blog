@@ -3,7 +3,6 @@ import { Icon } from "astro-icon/components";
 import { getPostsCategories } from "src/lib/collections/posts";
 import NavigationDetails from "~/components/layout/header/navigation/NavigationDetails.astro";
 import TagCloud from "~/components/collections/generic/TagCloud.astro";
-import { generalConfig } from "~/site.config";
 import { collectionsConfig } from "~/site.config";
 
 type Terms = {
@@ -31,7 +30,7 @@ const postsCategories: Terms[] = await getPostsCategories();
         postsCategories.map((category: Terms) => (
           <li role="none">
             <a
-              class="group/link border-mikado-500 hover:border-mikado-500 focus:text-mikado-950 focus:bg-mikado-200 focus-visible:bg-focus-color flex w-full items-center justify-between border-b bg-white/50 p-4 transition duration-300 focus-visible:border-black focus-visible:text-black md:border-transparent md:bg-transparent"
+              class="group/link border-mikado-500 focus-visible:bg-focus-color flex w-full items-center justify-between border-b bg-white/50 p-4 transition duration-300 focus-visible:border-black focus-visible:text-black md:bg-transparent"
               href={`${collectionsConfig.permalink_posts_category}${category.slug}`}
               aria-label={`Link to ${category.label}`}
               role="menuitem"
@@ -41,7 +40,7 @@ const postsCategories: Terms[] = await getPostsCategories();
                 name="material-symbols:arrow-right-alt"
                 height={18}
                 width={18}
-                class="group-hover/link:text-mikado-950 w-4 transition duration-500 group-focus/link:-rotate-45 group-focus/link:text-black md:text-transparent"
+                class="group-hover/link:text-mikado-950 w-4 transition duration-500 group-focus/link:-rotate-45 group-focus/link:text-black md:text-transparent dark:group-hover/link:text-white"
               />
             </a>
           </li>
@@ -51,16 +50,19 @@ const postsCategories: Terms[] = await getPostsCategories();
   </NavigationDetails>
 
   <NavigationDetails summary="Tags">
-    <TagCloud class="w-full p-4 transition duration-300" contentCollection="posts" />
+    <TagCloud
+      class="border-mikado-500 w-full border-b p-4 transition duration-300"
+      contentCollection="posts"
+    />
   </NavigationDetails>
 
   <a
-    class="group/link hover:text-mikado-950 border-mikado-500 focus:text-mikado-950 focus:bg-mikado-200 focus-visible:bg-focus-color flex w-full cursor-pointer items-center justify-between gap-4 border-b p-4 transition duration-300 focus-visible:border-b-2 focus-visible:border-black focus-visible:text-black"
+    class="group/link hover:text-mikado-950 border-mikado-500 focus:text-mikado-950 focus-visible:bg-focus-color flex w-full cursor-pointer items-center justify-between gap-4 border-b p-4 transition duration-300 focus-visible:border-b-2 focus-visible:border-black focus-visible:text-black dark:hover:text-white"
     href="/posts"
   >
     <span>View all posts</span>
     <Icon
-      class="group-hover/link:text-mikado-950 w-4 transition duration-300 group-focus/link:-rotate-45 group-focus/link:text-black md:text-transparent"
+      class="group-hover/link:text-mikado-950 w-4 transition duration-300 group-focus/link:-rotate-45 group-focus/link:text-black md:text-transparent dark:group-hover/link:text-white"
       name="material-symbols:arrow-right-alt"
       height={18}
       width={18}
@@ -69,13 +71,13 @@ const postsCategories: Terms[] = await getPostsCategories();
 
   <form class="group/search relative flex" action="/search" method="GET">
     <input
-      class="border-mikado-500 placeholder:text-mikado-900 group-hover/search:placeholder:text-mikado-950 focus:bg-mikado-100/25 ring-mikado-500 w-full border-0 border-b bg-transparent p-4 pr-12"
+      class="group-hover/search:placeholder:text-mikado-950 w-full border-0 border-b p-4 pr-12 dark:group-hover/search:placeholder:text-white"
       type="text"
       name="q"
       placeholder="Search"
     />
     <button
-      class="focus-visible:bg-focus-color group-hover/search:text-mikado-950 absolute top-1/2 right-4 -translate-y-1/2 transition duration-300 group-focus/search:text-black hover:cursor-pointer focus-visible:p-1 focus-visible:text-black"
+      class="focus-visible:bg-focus-color group-hover/search:text-mikado-950 absolute top-1/2 right-4 -translate-y-1/2 transition duration-300 group-focus/search:text-black hover:cursor-pointer focus-visible:p-1 focus-visible:text-black dark:group-hover/search:text-white dark:group-focus/search:text-white dark:focus-visible:text-black"
       type="submit"
     >
       <span class="sr-only">Search</span>
@@ -93,7 +95,7 @@ const postsCategories: Terms[] = await getPostsCategories();
 
     let siteNavigationOpen = false;
 
-    const lockBodyScroll = (lock) => {
+    const lockBodyScroll = (lock: boolean) => {
       document.body.classList.toggle("h-full", lock);
       document.body.classList.toggle("overflow-hidden", lock);
     };
