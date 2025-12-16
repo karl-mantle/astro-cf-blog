@@ -10,14 +10,14 @@ export async function GET(context: APIContext) {
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquam.",
     site: context.site ?? "https://blog.karlmantle.workers.dev/",
-    trailingSlash: false,
+    trailingSlash: true,
     stylesheet: "/rss/pretty-feed-v3.xsl",
     customData: `<language>en-GB</language>`,
     items: posts.map((post) => ({
       title: post.data.title,
       description: post.data.description,
       pubDate: post.data.pubDate,
-      link: `https://blog.karlmantle.workers.dev/posts/${post.data.slug}`,
+      link: `https://blog.karlmantle.workers.dev/posts/entry/${post.data.slug}`,
     })),
   });
 }

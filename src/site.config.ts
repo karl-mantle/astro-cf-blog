@@ -1,8 +1,8 @@
 export const generalConfig = {
   // site identity
   url: new URL("https://blog.karlmantle.workers.dev/"),
-  name: "karl's blog",
-  short_name: "karlsblog",
+  name: "Karl's blog",
+  short_name: "Karlsblog",
   title_separator: "~",
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquam.",
