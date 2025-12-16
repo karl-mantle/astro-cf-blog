@@ -6,7 +6,7 @@ const { heading } = Astro.props;
 
 <li style={`margin-left: ${(heading.depth - 2) * 0.5}rem`} class="flex flex-col">
   <a
-    class="hover:text-mikado-950 focus-visible:bg-focus-color border-b-2 border-transparent py-1 text-sm transition-all duration-300 hover:underline focus-visible:border-black focus-visible:px-1 focus-visible:text-black dark:hover:text-white"
+    class="hover:text-mikado-950 focus-visible:bg-mikado-300 border-b-2 border-transparent py-1 text-sm font-medium underline-offset-4 transition duration-300 hover:underline focus:decoration-2 focus-visible:border-black focus-visible:px-1 focus-visible:text-black dark:hover:text-white"
     href={"#" + heading.slug}
   >
     {heading.text}

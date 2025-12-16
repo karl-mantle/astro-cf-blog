@@ -9,21 +9,20 @@ const { headings } = Astro.props as { headings: MarkdownHeading[] };
 const toc = getTableOfContents(headings);
 ---
 
-<aside class="sticky top-0">
+<div class="sticky top-0 z-50">
   <nav
     id="toc"
-    class="bg-mikado-100 dark:bg-mikado-950 pointer-events-none fixed inset-0 m-4 flex hidden h-fit w-full max-w-[calc(100vw-2rem)] flex-col gap-2 overflow-y-auto p-4 md:absolute md:right-auto md:-left-84 md:max-w-72"
+    class="bg-mikado-100 dark:bg-mikado-900 pointer-events-none fixed inset-0 m-4 flex hidden h-fit w-full max-w-[calc(100vw-2rem)] flex-col gap-2 overflow-y-auto p-4 transition duration-300 md:absolute md:right-0 md:left-auto md:m-0 md:max-w-64"
     aria-hidden="true"
   >
-    <div class="mb-2 w-fit pb-1 text-lg">Table of contents:</div>
-
+    <div class="border-mikado-500 mb-2 w-fit border-b pb-1 text-lg">Table of contents:</div>
     <ul>
       {toc.map((heading) => <Heading heading={heading} />)}
     </ul>
 
     <button
       id="toc-close-btn"
-      class="xl:hover:border-mikado-950 focus-visible:bg-focus-color flex cursor-pointer items-center justify-center gap-2 border-b-2 border-transparent p-2 text-sm transition-colors duration-300 focus-visible:border-black focus-visible:text-black xl:mx-auto xl:w-fit dark:xl:hover:border-white"
+      class="xl:hover:border-mikado-950 focus-visible:bg-mikado-300 flex cursor-pointer items-center justify-center gap-2 border-b border-transparent p-2 text-sm transition duration-300 focus:border-b-2 focus-visible:border-black focus-visible:text-black xl:mx-auto xl:w-fit dark:xl:hover:border-white"
       aria-label="close table of contents"
       aria-pressed="false"
       type="button"
@@ -32,7 +31,7 @@ const toc = getTableOfContents(headings);
       <span>Close</span>
     </button>
   </nav>
-</aside>
+</div>
 
 <script>
   function initToc() {

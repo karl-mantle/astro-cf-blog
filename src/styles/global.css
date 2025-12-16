@@ -23,8 +23,8 @@
   --color-mikado-500: oklch(0.78 0.16 88); /* base */
   --color-mikado-600: oklch(0.68 0.14 88);
   --color-mikado-700: oklch(0.56 0.115 88);
-  --color-mikado-800: oklch(0.46 0.095 88);
-  --color-mikado-900: oklch(0.38 0.08 88);
+  --color-mikado-800: oklch(0.4 0.095 88);
+  --color-mikado-900: oklch(0.29 0.06 88);
   --color-mikado-950: oklch(0.22 0.045 88);
 }
 
