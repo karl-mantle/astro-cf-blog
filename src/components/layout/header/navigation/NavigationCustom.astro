@@ -30,7 +30,7 @@ const postsCategories: Terms[] = await getPostsCategories();
         postsCategories.map((category: Terms) => (
           <li role="none">
             <a
-              class="group/link border-mikado-500 focus-visible:bg-focus-color flex w-full items-center justify-between border-b bg-white/50 p-4 transition duration-300 focus-visible:border-black focus-visible:text-black md:bg-transparent"
+              class="group/link border-mikado-500 focus-visible:bg-focus-color dark:bg-mikado-900 bg-mikado-100 flex w-full items-center justify-between border-b p-4 transition duration-300 focus-visible:border-black focus-visible:text-black md:bg-transparent"
               href={`${collectionsConfig.permalink_posts_category}${category.slug}`}
               aria-label={`Link to ${category.label}`}
               role="menuitem"

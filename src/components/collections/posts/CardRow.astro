@@ -26,7 +26,8 @@ const { date, description, heading, href, image, loading }: Props = Astro.props;
     class="group/card hover:text-mikado-950 focus-visible:border-mikado-300 focus-visible:bg-focus-color flex flex-grow flex-col-reverse gap-4 border-2 border-transparent focus-visible:border-2 focus-visible:text-black lg:flex-row-reverse dark:hover:text-white"
     href={href}
   >
-    <div class="flex h-fit p-2">
+    <div class="flex h-fit gap-2 lg:gap-0 lg:p-2">
+      <span class="lg:hidden" aria-hidden="true">Read more</span>
       <Icon
         name="material-symbols:arrow-right-alt"
         height={24}
