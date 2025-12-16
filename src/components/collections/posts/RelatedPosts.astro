@@ -23,9 +23,9 @@ const entries = await getPostsByCategory(category, max);
 <ol
   class:list={[
     "not-prose grid w-full grid-cols-1 gap-4",
-    columns === 2 && "md:grid-cols-2",
-    columns === 3 && "md:grid-cols-3",
-    columns === 4 && "md:grid-cols-4",
+    columns === 2 && "xl:grid-cols-2",
+    columns === 3 && "lg:grid-cols-2 xl:grid-cols-3",
+    columns === 4 && "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
     className,
   ]}
 >

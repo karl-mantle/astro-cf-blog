@@ -28,7 +28,7 @@ const filteredTags = tags.filter((tag) => (tag.count ?? 0) >= threshold);
 
 function getTagSize(count?: number): string {
   if (count) {
-    const size = Math.min(0.5 + count * 0.15, 2);
+    const size = Math.min(0.5 + count * 0.15, 1.5);
     return `${size}rem`;
   } else {
     return "1rem";
@@ -37,7 +37,7 @@ function getTagSize(count?: number): string {
 ---
 
 <ul
-  class:list={["not-prose flex flex-wrap gap-1 px-1", className]}
+  class:list={["not-prose flex flex-wrap gap-1", className]}
   aria-label={`List of ${contentCollection} tags`}
   {...rest}
 >
